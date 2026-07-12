@@ -4,6 +4,10 @@ namespace BmkgScraper.Models;
 
 internal sealed class ForecastData
 {
+    public ForecastData()
+    {
+    }
+
     [JsonPropertyName("batch_id")]
     public required string BatchId { get; init; }
 
