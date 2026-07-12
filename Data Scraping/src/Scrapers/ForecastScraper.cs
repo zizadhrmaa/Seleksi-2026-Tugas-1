@@ -43,12 +43,20 @@ internal sealed class ForecastScraper : IForecastScraper
         List<ScrapeErrorData> errors = [];
 
         DateTimeOffset extractedAt =
-            DateTimeOffset.UtcNow.ToOffset(batch.BatchStartedAt.Offset);
+            DateTimeOffset.UtcNow.ToOffset(
+                batch.BatchStartedAt.Offset);
 
         for (int index = 0; index < rows.Count; index++)
         {
+            HtmlNode row = rows[index];
+
+            if (IsEmptyRow(row))
+            {
+                continue;
+            }
+
             ForecastRowParseResult parseResult = _rowParser.Parse(
-                rows[index],
+                row,
                 port,
                 batch,
                 extractedAt);
@@ -59,20 +67,79 @@ internal sealed class ForecastScraper : IForecastScraper
                 continue;
             }
 
+            errors.Add(CreateRowError(
+                port,
+                batch,
+                index + 1,
+                parseResult));
+        }
+
+        if (forecasts.Count == 0 && errors.Count == 0)
+        {
             errors.Add(new ScrapeErrorData
             {
                 BatchId = batch.BatchId,
                 PortCode = port.PortCode,
                 PortName = port.PortName,
-                ErrorScope = "ROW",
-                RowIndex = index + 1,
-                Message = parseResult.ErrorMessage ?? "Unknown row parsing error.",
-                RawData = parseResult.RawRowText,
+                ErrorScope = "PORT",
+                RowIndex = null,
+                Message =
+                    "Halaman tidak menyediakan data prakiraan " +
+                    "yang dapat diproses.",
+                RawData = null,
                 OccurredAt =
-                    DateTimeOffset.UtcNow.ToOffset(batch.BatchStartedAt.Offset)
+                    DateTimeOffset.UtcNow.ToOffset(
+                        batch.BatchStartedAt.Offset)
             });
         }
 
         return new ForecastScrapeResult(forecasts, errors);
+    }
+
+    private static bool IsEmptyRow(HtmlNode row)
+    {
+        string text = TextNormalizer.Clean(row.InnerText);
+
+        if (!string.IsNullOrWhiteSpace(text))
+        {
+            return false;
+        }
+
+        HtmlNodeCollection? images =
+            row.SelectNodes(".//img[@alt]");
+
+        if (images is null)
+        {
+            return true;
+        }
+
+        return images.All(image =>
+            string.IsNullOrWhiteSpace(
+                image.GetAttributeValue(
+                    "alt",
+                    string.Empty)));
+    }
+
+    private static ScrapeErrorData CreateRowError(
+        PortData port,
+        ScrapeBatchContext batch,
+        int rowIndex,
+        ForecastRowParseResult parseResult)
+    {
+        return new ScrapeErrorData
+        {
+            BatchId = batch.BatchId,
+            PortCode = port.PortCode,
+            PortName = port.PortName,
+            ErrorScope = "ROW",
+            RowIndex = rowIndex,
+            Message =
+                parseResult.ErrorMessage ??
+                "Unknown row parsing error.",
+            RawData = parseResult.RawRowText,
+            OccurredAt =
+                DateTimeOffset.UtcNow.ToOffset(
+                    batch.BatchStartedAt.Offset)
+        };
     }
 }
