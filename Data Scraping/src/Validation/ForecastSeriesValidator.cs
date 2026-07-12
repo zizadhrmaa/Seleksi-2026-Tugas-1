@@ -6,10 +6,14 @@ internal sealed class ForecastSeriesValidator : IForecastSeriesValidator
 {
     private readonly int _expectedForecastCount;
     private readonly double _currentSpeedSpikeThresholdKnot;
+    private readonly TimeSpan _laggedForecastThreshold;
+    private readonly TimeSpan _staleForecastThreshold;
 
     public ForecastSeriesValidator(
         int expectedForecastCount,
-        double currentSpeedSpikeThresholdKnot)
+        double currentSpeedSpikeThresholdKnot,
+        TimeSpan laggedForecastThreshold,
+        TimeSpan staleForecastThreshold)
     {
         if (expectedForecastCount <= 0)
         {
@@ -23,9 +27,23 @@ internal sealed class ForecastSeriesValidator : IForecastSeriesValidator
                 nameof(currentSpeedSpikeThresholdKnot));
         }
 
+        if (laggedForecastThreshold <= TimeSpan.Zero)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(laggedForecastThreshold));
+        }
+
+        if (staleForecastThreshold <= laggedForecastThreshold)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(staleForecastThreshold));
+        }
+
         _expectedForecastCount = expectedForecastCount;
         _currentSpeedSpikeThresholdKnot =
             currentSpeedSpikeThresholdKnot;
+        _laggedForecastThreshold = laggedForecastThreshold;
+        _staleForecastThreshold = staleForecastThreshold;
     }
 
     public IReadOnlyList<string> Validate(
@@ -40,9 +58,32 @@ internal sealed class ForecastSeriesValidator : IForecastSeriesValidator
                 QualityFlagCodes.UnexpectedForecastCount);
         }
 
+        if (forecasts.Count == 0)
+        {
+            return [];
+        }
+
+        DateTimeOffset latestForecastAt = forecasts
+            .Max(forecast => forecast.ForecastAt);
+
+        DateTimeOffset latestExtractionAt = forecasts
+            .Max(forecast => forecast.ExtractedAt);
+
+        TimeSpan latestForecastAge =
+            latestExtractionAt - latestForecastAt;
+
+        if (latestForecastAge > _laggedForecastThreshold &&
+            latestForecastAge <= _staleForecastThreshold)
+        {
+            qualityFlags.Add(
+                QualityFlagCodes.ForecastPeriodLagged);
+        }
+
         if (forecasts.Count <= 1)
         {
-            return qualityFlags.OrderBy(flag => flag).ToList();
+            return qualityFlags
+                .OrderBy(flag => flag)
+                .ToList();
         }
 
         HashSet<DateTimeOffset> forecastTimes = [];
