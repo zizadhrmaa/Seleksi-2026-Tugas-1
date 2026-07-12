@@ -10,13 +10,38 @@ internal sealed class MeasurementParser
 {
     private const string NumberPattern = @"[+-]?\d+(?:[.,]\d+)?";
 
+    private static readonly IReadOnlyDictionary<string, string>
+        MonthAbbreviationMap =
+            new Dictionary<string, string>(
+                StringComparer.OrdinalIgnoreCase)
+            {
+                ["Jan"] = "Jan",
+                ["Feb"] = "Feb",
+                ["Mar"] = "Mar",
+                ["Apr"] = "Apr",
+                ["Mei"] = "May",
+                ["May"] = "May",
+                ["Jun"] = "Jun",
+                ["Jul"] = "Jul",
+                ["Agu"] = "Aug",
+                ["Ags"] = "Aug",
+                ["Aug"] = "Aug",
+                ["Sep"] = "Sep",
+                ["Okt"] = "Oct",
+                ["Oct"] = "Oct",
+                ["Nov"] = "Nov",
+                ["Des"] = "Dec",
+                ["Dec"] = "Dec"
+            };
+
     private readonly double _maxReasonableVisibilityKm;
 
     public MeasurementParser(double maxReasonableVisibilityKm)
     {
         if (maxReasonableVisibilityKm <= 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(maxReasonableVisibilityKm));
+            throw new ArgumentOutOfRangeException(
+                nameof(maxReasonableVisibilityKm));
         }
 
         _maxReasonableVisibilityKm = maxReasonableVisibilityKm;
@@ -28,7 +53,12 @@ internal sealed class MeasurementParser
     {
         Match match = Regex.Match(
             text,
-            @"^(?<date>\d{1,2}\s+[A-Za-z]{3}\s+\d{2},\s+\d{2}\.\d{2})");
+            @"^(?<day>\d{1,2})\s+" +
+            @"(?<month>[A-Za-z]{3})\s+" +
+            @"(?<year>\d{2}),\s+" +
+            @"(?<hour>\d{2})\." +
+            @"(?<minute>\d{2})",
+            RegexOptions.CultureInvariant);
 
         if (!match.Success)
         {
@@ -36,8 +66,25 @@ internal sealed class MeasurementParser
             return false;
         }
 
+        string sourceMonth = match.Groups["month"].Value;
+
+        if (!MonthAbbreviationMap.TryGetValue(
+                sourceMonth,
+                out string? normalizedMonth))
+        {
+            forecastAt = default;
+            return false;
+        }
+
+        string normalizedDateText =
+            $"{match.Groups["day"].Value} " +
+            $"{normalizedMonth} " +
+            $"{match.Groups["year"].Value}, " +
+            $"{match.Groups["hour"].Value}." +
+            $"{match.Groups["minute"].Value}";
+
         bool parsed = DateTime.TryParseExact(
-            match.Groups["date"].Value,
+            normalizedDateText,
             "d MMM yy, HH.mm",
             CultureInfo.InvariantCulture,
             DateTimeStyles.None,
@@ -50,7 +97,9 @@ internal sealed class MeasurementParser
         }
 
         forecastAt = new DateTimeOffset(
-            DateTime.SpecifyKind(parsedDate, DateTimeKind.Unspecified),
+            DateTime.SpecifyKind(
+                parsedDate,
+                DateTimeKind.Unspecified),
             TimeSpan.FromHours(7));
 
         return true;
@@ -68,13 +117,17 @@ internal sealed class MeasurementParser
 
         if (!match.Success)
         {
-            throw new FormatException($"Format data angin tidak dikenali: {text}");
+            throw new FormatException(
+                $"Format data angin tidak dikenali: {text}");
         }
 
         return new WindParseResult(
-            TextNormalizer.Clean(match.Groups["direction"].Value),
-            ParseNumericText(match.Groups["speed"].Value),
-            ParseNumericText(match.Groups["gust"].Value));
+            TextNormalizer.Clean(
+                match.Groups["direction"].Value),
+            ParseNumericText(
+                match.Groups["speed"].Value),
+            ParseNumericText(
+                match.Groups["gust"].Value));
     }
 
     public WaveParseResult ParseWave(string text)
@@ -86,29 +139,36 @@ internal sealed class MeasurementParser
 
         if (!match.Success)
         {
-            throw new FormatException($"Format data gelombang tidak dikenali: {text}");
+            throw new FormatException(
+                $"Format data gelombang tidak dikenali: {text}");
         }
 
         return new WaveParseResult(
-            ParseNumericText(match.Groups["height"].Value),
-            TextNormalizer.Clean(match.Groups["category"].Value));
+            ParseNumericText(
+                match.Groups["height"].Value),
+            TextNormalizer.Clean(
+                match.Groups["category"].Value));
     }
 
     public CurrentParseResult ParseCurrent(string text)
     {
         Match match = Regex.Match(
             text,
-            @"^(?<direction>.*?)(?<speed>[+-]?\d+(?:[.,]\d+)?)\s*Knot\s*$",
+            @"^(?<direction>.*?)" +
+            @"(?<speed>[+-]?\d+(?:[.,]\d+)?)\s*Knot\s*$",
             RegexOptions.IgnoreCase);
 
         if (!match.Success)
         {
-            throw new FormatException($"Format data arus tidak dikenali: {text}");
+            throw new FormatException(
+                $"Format data arus tidak dikenali: {text}");
         }
 
         return new CurrentParseResult(
-            TextNormalizer.Clean(match.Groups["direction"].Value),
-            ParseNumericText(match.Groups["speed"].Value));
+            TextNormalizer.Clean(
+                match.Groups["direction"].Value),
+            ParseNumericText(
+                match.Groups["speed"].Value));
     }
 
     public VisibilityParseResult ParseVisibility(string rawText)
@@ -177,7 +237,8 @@ internal sealed class MeasurementParser
 
         if (!match.Success)
         {
-            throw new FormatException($"Tidak ditemukan angka pada: {text}");
+            throw new FormatException(
+                $"Tidak ditemukan angka pada: {text}");
         }
 
         return ParseNumericText(match.Value);
