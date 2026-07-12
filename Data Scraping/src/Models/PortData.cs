@@ -4,6 +4,10 @@ namespace BmkgScraper.Models;
 
 internal sealed class PortData
 {
+    public PortData()
+    {
+    }
+
     [JsonPropertyName("port_code")]
     public required string PortCode { get; init; }
 
