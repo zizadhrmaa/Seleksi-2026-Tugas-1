@@ -24,6 +24,20 @@ internal sealed class OutputPathProvider
         return Path.Combine(GetBatchDirectory(batchId), "errors.json");
     }
 
+    public string GetSelectedPortsPath(string batchId)
+    {
+        return Path.Combine(
+            GetBatchDirectory(batchId),
+            "selected_ports.json");
+    }
+
+    public string GetPortResultsPath(string batchId)
+    {
+        return Path.Combine(
+            GetBatchDirectory(batchId),
+            "port_results.json");
+    }
+
     public string GetPortForecastPath(string batchId, string portCode)
     {
         string safePortCode = SanitizeFileName(portCode);
