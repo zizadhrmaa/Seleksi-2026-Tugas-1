@@ -8,11 +8,18 @@ internal sealed record ScrapeBatchContext(
 {
     public static ScrapeBatchContext Create(TimeSpan utcOffset)
     {
-        DateTimeOffset startedAt = DateTimeOffset.UtcNow.ToOffset(utcOffset);
-        string uniqueSuffix = Guid.NewGuid().ToString("N")[..8];
-        string batchId = $"batch-{startedAt:yyyyMMdd-HHmmss}-{uniqueSuffix}";
+        DateTimeOffset startedAt =
+            DateTimeOffset.UtcNow.ToOffset(utcOffset);
 
-        return new ScrapeBatchContext(batchId, startedAt);
+        string uniqueSuffix =
+            Guid.NewGuid().ToString("N")[..8];
+
+        string batchId =
+            $"batch-{startedAt:yyyyMMdd-HHmmss}-{uniqueSuffix}";
+
+        return new ScrapeBatchContext(
+            batchId,
+            startedAt);
     }
 }
 
@@ -41,6 +48,9 @@ internal sealed class ScrapeBatchData
 
     [JsonPropertyName("error_count")]
     public int ErrorCount { get; init; }
+
+    [JsonPropertyName("quality_warning_count")]
+    public int QualityWarningCount { get; init; }
 
     [JsonPropertyName("status")]
     public required string Status { get; init; }
