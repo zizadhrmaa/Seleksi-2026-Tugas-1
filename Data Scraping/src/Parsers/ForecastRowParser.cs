@@ -35,6 +35,7 @@ internal sealed class ForecastRowParser : IForecastRowParser
             if (cells is null || cells.Count < 9)
             {
                 return ForecastRowParseResult.Failure(
+                    ScrapeErrorCodes.InvalidColumnCount,
                     $"Jumlah kolom tidak valid. " +
                     $"Ditemukan {cells?.Count ?? 0}, minimal 9.",
                     rawRowText);
@@ -47,6 +48,7 @@ internal sealed class ForecastRowParser : IForecastRowParser
                     out DateTimeOffset forecastAt))
             {
                 return ForecastRowParseResult.Failure(
+                    ScrapeErrorCodes.ForecastTimeParseFailed,
                     $"Waktu gagal diproses: {forecastText}",
                     rawRowText);
             }
@@ -92,11 +94,17 @@ internal sealed class ForecastRowParser : IForecastRowParser
                     humidityPercent),
                 StringComparer.OrdinalIgnoreCase);
 
-            if (batch.BatchStartedAt - forecastAt >
-                StaleForecastThreshold)
+            TimeSpan forecastAge = extractedAt - forecastAt;
+
+            if (forecastAge > StaleForecastThreshold)
             {
                 qualityFlags.Add(
                     QualityFlagCodes.ForecastStale);
+            }
+            else if (forecastAge > TimeSpan.FromHours(24))
+            {
+                qualityFlags.Add(
+                    QualityFlagCodes.ForecastPeriodLagged);
             }
 
             ForecastData forecast = new()
@@ -132,6 +140,7 @@ internal sealed class ForecastRowParser : IForecastRowParser
         catch (Exception exception)
         {
             return ForecastRowParseResult.Failure(
+                ScrapeErrorCodes.RowParseFailed,
                 exception.Message,
                 rawRowText);
         }
