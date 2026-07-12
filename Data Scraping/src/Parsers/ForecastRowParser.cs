@@ -101,12 +101,6 @@ internal sealed class ForecastRowParser : IForecastRowParser
                 qualityFlags.Add(
                     QualityFlagCodes.ForecastStale);
             }
-            else if (forecastAge > TimeSpan.FromHours(24))
-            {
-                qualityFlags.Add(
-                    QualityFlagCodes.ForecastPeriodLagged);
-            }
-
             ForecastData forecast = new()
             {
                 BatchId = batch.BatchId,
