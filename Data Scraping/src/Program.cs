@@ -28,9 +28,8 @@ internal static class Program
 
         try
         {
-            ScrapeRunOptions runOptions = new(
-                ResolvePortLimit(args),
-                ResolveSelectionMode(args));
+            ScrapeRunOptions runOptions =
+                ResolveRunOptions(args);
 
             TimeSpan requestDelay =
                 ResolveRequestDelay(args);
@@ -51,10 +50,17 @@ internal static class Program
                 new ForecastValidator(
                     maxReasonableCurrentSpeedKnot: 15);
 
+            const double currentSpeedSpikeThresholdKnot = 10;
+
             IForecastSeriesValidator seriesValidator =
                 new ForecastSeriesValidator(
                     expectedForecastCount: 41,
-                    currentSpeedSpikeThresholdKnot: 10);
+                    currentSpeedSpikeThresholdKnot:
+                        currentSpeedSpikeThresholdKnot,
+                    laggedForecastThreshold:
+                        TimeSpan.FromHours(24),
+                    staleForecastThreshold:
+                        TimeSpan.FromDays(7));
 
             MeasurementParser measurementParser =
                 new(maxReasonableVisibilityKm: 100);
@@ -74,14 +80,21 @@ internal static class Program
 
             OutputPathProvider outputPathProvider = new();
             IDataWriter dataWriter = new JsonDataWriter();
+            IDataReader dataReader = new JsonDataReader();
+
+            QualityReportBuilder qualityReportBuilder = new(
+                currentSpeedSpikeThresholdKnot);
 
             ScrapeRunner runner = new(
                 portScraper,
                 forecastScraper,
                 dataWriter,
+                dataReader,
                 outputPathProvider,
+                qualityReportBuilder,
                 requestDelay,
-                TimeSpan.FromHours(7));
+                sourceRetryDelay: TimeSpan.FromSeconds(30),
+                localOffset: TimeSpan.FromHours(7));
 
             await runner.RunAsync(
                 runOptions,
@@ -102,6 +115,96 @@ internal static class Program
         }
     }
 
+    private static ScrapeRunOptions ResolveRunOptions(
+        string[] args)
+    {
+        string? retryBatchId =
+            ResolveOptionValue(args, "--retry-batch");
+
+        string? resumeBatchId =
+            ResolveOptionValue(args, "--resume");
+
+        if (retryBatchId is not null &&
+            resumeBatchId is not null)
+        {
+            throw new ArgumentException(
+                "--retry-batch dan --resume tidak dapat digunakan " +
+                "bersamaan.");
+        }
+
+        if (retryBatchId is not null)
+        {
+            EnsureNoSelectionArguments(args, "--retry-batch");
+
+            return new ScrapeRunOptions(
+                PortLimit: null,
+                SelectionMode: PortSelectionMode.Spread,
+                RunMode: ScrapeRunMode.RetryBatch,
+                ReferenceBatchId: retryBatchId);
+        }
+
+        if (resumeBatchId is not null)
+        {
+            EnsureNoSelectionArguments(args, "--resume");
+
+            return new ScrapeRunOptions(
+                PortLimit: null,
+                SelectionMode: PortSelectionMode.Spread,
+                RunMode: ScrapeRunMode.Resume,
+                ReferenceBatchId: resumeBatchId);
+        }
+
+        return new ScrapeRunOptions(
+            ResolvePortLimit(args),
+            ResolveSelectionMode(args),
+            ScrapeRunMode.New,
+            ReferenceBatchId: null);
+    }
+
+    private static void EnsureNoSelectionArguments(
+        string[] args,
+        string activeArgument)
+    {
+        string[] incompatibleArguments =
+            ["--all", "--limit", "--selection"];
+
+        if (args.Any(argument =>
+                incompatibleArguments.Contains(
+                    argument,
+                    StringComparer.OrdinalIgnoreCase)))
+        {
+            throw new ArgumentException(
+                $"{activeArgument} tidak dapat digabungkan dengan " +
+                "--all, --limit, atau --selection.");
+        }
+    }
+
+    private static string? ResolveOptionValue(
+        string[] args,
+        string optionName)
+    {
+        int optionIndex = Array.FindIndex(
+            args,
+            argument => argument.Equals(
+                optionName,
+                StringComparison.OrdinalIgnoreCase));
+
+        if (optionIndex < 0)
+        {
+            return null;
+        }
+
+        if (optionIndex + 1 >= args.Length ||
+            string.IsNullOrWhiteSpace(args[optionIndex + 1]) ||
+            args[optionIndex + 1].StartsWith("--"))
+        {
+            throw new ArgumentException(
+                $"{optionName} membutuhkan batch ID.");
+        }
+
+        return args[optionIndex + 1].Trim();
+    }
+
     private static HttpClient CreateHttpClient()
     {
         HttpClient client = new()
@@ -111,7 +214,7 @@ internal static class Program
 
         client.DefaultRequestHeaders.TryAddWithoutValidation(
             "User-Agent",
-            "BasisDataSelectionScraper/2.1 " +
+            "BasisDataSelectionScraper/2.2 " +
             "(educational project; contact: " +
             "13524017@std.stei.itb.ac.id)");
 
