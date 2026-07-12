@@ -34,6 +34,9 @@ internal sealed class ScrapeBatchData
     [JsonPropertyName("batch_finished_at")]
     public DateTimeOffset BatchFinishedAt { get; init; }
 
+    [JsonPropertyName("selection_mode")]
+    public required string SelectionMode { get; init; }
+
     [JsonPropertyName("requested_port_count")]
     public int RequestedPortCount { get; init; }
 
