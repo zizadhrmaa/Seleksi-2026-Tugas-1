@@ -66,6 +66,10 @@ internal sealed record ForecastScrapeResult(
 
 internal sealed class ScrapeErrorData
 {
+    public ScrapeErrorData()
+    {
+    }
+
     [JsonPropertyName("batch_id")]
     public required string BatchId { get; init; }
 
