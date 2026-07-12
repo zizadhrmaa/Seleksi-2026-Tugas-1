@@ -50,6 +50,7 @@ internal sealed class ForecastScraper : IForecastScraper
         int totalAttemptCount = 0;
         HttpFetchResult? lastFetchResult = null;
         HtmlNodeCollection? rows = null;
+        List<HtmlNode> usableRows = [];
         string lastHtml = string.Empty;
 
         for (int contentAttempt = 1;
@@ -88,7 +89,12 @@ internal sealed class ForecastScraper : IForecastScraper
             rows = document.DocumentNode.SelectNodes(
                 "//table//tr[td]");
 
-            if (rows is not null && rows.Count > 0)
+            usableRows = rows?
+                .Where(row => !IsEmptyRow(row))
+                .ToList()
+                ?? [];
+
+            if (usableRows.Count > 0)
             {
                 break;
             }
@@ -132,26 +138,36 @@ internal sealed class ForecastScraper : IForecastScraper
 
         HttpFetchResult fetchResult = lastFetchResult ??
             throw new InvalidOperationException(
-                "Metadata HTTP tidak tersedia setelah halaman berhasil diproses.");
+                "Metadata HTTP tidak tersedia setelah halaman diproses.");
+
+        if (usableRows.Count == 0)
+        {
+            stopwatch.Stop();
+
+            return CreatePortFailureResult(
+                port,
+                batch,
+                ScrapeErrorCodes.AllRowsEmpty,
+                "Seluruh baris pada tabel prakiraan tetap kosong " +
+                "setelah percobaan ulang.",
+                totalAttemptCount,
+                (int)fetchResult.StatusCode,
+                stopwatch.ElapsedMilliseconds,
+                rows.Count);
+        }
 
         List<ForecastData> forecasts = [];
         List<ScrapeErrorData> errors = [];
-        int nonEmptyRowCount = 0;
 
         DateTimeOffset extractedAt =
             DateTimeOffset.UtcNow.ToOffset(
                 batch.BatchStartedAt.Offset);
 
-        for (int index = 0; index < rows.Count; index++)
+        for (int index = 0;
+             index < usableRows.Count;
+             index++)
         {
-            HtmlNode row = rows[index];
-
-            if (IsEmptyRow(row))
-            {
-                continue;
-            }
-
-            nonEmptyRowCount++;
+            HtmlNode row = usableRows[index];
 
             ForecastRowParseResult parseResult = _rowParser.Parse(
                 row,
@@ -173,19 +189,7 @@ internal sealed class ForecastScraper : IForecastScraper
                 rows.Count));
         }
 
-        if (nonEmptyRowCount == 0)
-        {
-            errors.Add(CreatePortError(
-                port,
-                batch,
-                ScrapeErrorCodes.AllRowsEmpty,
-                "Seluruh baris pada tabel prakiraan kosong.",
-                totalAttemptCount,
-                (int)fetchResult.StatusCode,
-                stopwatch.ElapsedMilliseconds,
-                rows.Count));
-        }
-        else if (forecasts.Count == 0)
+        if (forecasts.Count == 0)
         {
             errors.Add(CreatePortError(
                 port,
