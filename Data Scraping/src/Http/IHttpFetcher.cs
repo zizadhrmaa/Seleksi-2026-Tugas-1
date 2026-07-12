@@ -2,7 +2,7 @@ namespace BmkgScraper.Http;
 
 internal interface IHttpFetcher
 {
-    Task<string> GetHtmlAsync(
+    Task<HttpFetchResult> GetHtmlAsync(
         Uri url,
         CancellationToken cancellationToken = default);
 }
