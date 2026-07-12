@@ -6,6 +6,9 @@ namespace BmkgScraper.Parsers;
 
 internal sealed class ForecastRowParser : IForecastRowParser
 {
+    private static readonly TimeSpan StaleForecastThreshold =
+        TimeSpan.FromDays(7);
+
     private readonly MeasurementParser _measurementParser;
     private readonly IForecastValidator _forecastValidator;
 
@@ -32,7 +35,8 @@ internal sealed class ForecastRowParser : IForecastRowParser
             if (cells is null || cells.Count < 9)
             {
                 return ForecastRowParseResult.Failure(
-                    $"Jumlah kolom tidak valid. Ditemukan {cells?.Count ?? 0}, minimal 9.",
+                    $"Jumlah kolom tidak valid. " +
+                    $"Ditemukan {cells?.Count ?? 0}, minimal 9.",
                     rawRowText);
             }
 
@@ -48,32 +52,52 @@ internal sealed class ForecastRowParser : IForecastRowParser
             }
 
             string weather = ExtractCellContent(cells[1]);
+
             WindParseResult wind =
-                _measurementParser.ParseWind(ExtractCellContent(cells[2]));
+                _measurementParser.ParseWind(
+                    ExtractCellContent(cells[2]));
+
             WaveParseResult wave =
-                _measurementParser.ParseWave(ExtractCellContent(cells[3]));
+                _measurementParser.ParseWave(
+                    ExtractCellContent(cells[3]));
+
             CurrentParseResult current =
-                _measurementParser.ParseCurrent(ExtractCellContent(cells[4]));
+                _measurementParser.ParseCurrent(
+                    ExtractCellContent(cells[4]));
 
             VisibilityParseResult visibility =
-                _measurementParser.ParseVisibility(ExtractCellContent(cells[5]));
+                _measurementParser.ParseVisibility(
+                    ExtractCellContent(cells[5]));
 
             double temperatureCelsius =
-                _measurementParser.ParseRequiredNumber(ExtractCellContent(cells[6]));
+                _measurementParser.ParseRequiredNumber(
+                    ExtractCellContent(cells[6]));
+
             double humidityPercent =
-                _measurementParser.ParseRequiredNumber(ExtractCellContent(cells[7]));
+                _measurementParser.ParseRequiredNumber(
+                    ExtractCellContent(cells[7]));
 
             TideParseResult tide =
-                _measurementParser.ParseTide(ExtractCellContent(cells[8]));
+                _measurementParser.ParseTide(
+                    ExtractCellContent(cells[8]));
 
-            IReadOnlyList<string> qualityFlags = _forecastValidator.Validate(
-                wind,
-                wave,
-                current,
-                visibility,
-                tide,
-                temperatureCelsius,
-                humidityPercent);
+            HashSet<string> qualityFlags = new(
+                _forecastValidator.Validate(
+                    wind,
+                    wave,
+                    current,
+                    visibility,
+                    tide,
+                    temperatureCelsius,
+                    humidityPercent),
+                StringComparer.OrdinalIgnoreCase);
+
+            if (batch.BatchStartedAt - forecastAt >
+                StaleForecastThreshold)
+            {
+                qualityFlags.Add(
+                    QualityFlagCodes.ForecastStale);
+            }
 
             ForecastData forecast = new()
             {
@@ -96,7 +120,9 @@ internal sealed class ForecastRowParser : IForecastRowParser
                 HumidityPercent = humidityPercent,
                 RawTide = tide.RawValue,
                 TideMeter = tide.ValueMeter,
-                QualityFlags = qualityFlags,
+                QualityFlags = qualityFlags
+                    .OrderBy(flag => flag)
+                    .ToList(),
                 SourceUrl = port.DetailUrl,
                 ExtractedAt = extractedAt
             };
@@ -105,7 +131,9 @@ internal sealed class ForecastRowParser : IForecastRowParser
         }
         catch (Exception exception)
         {
-            return ForecastRowParseResult.Failure(exception.Message, rawRowText);
+            return ForecastRowParseResult.Failure(
+                exception.Message,
+                rawRowText);
         }
     }
 
@@ -120,16 +148,21 @@ internal sealed class ForecastRowParser : IForecastRowParser
             contents.Add(text);
         }
 
-        HtmlNodeCollection? images = cell.SelectNodes(".//img[@alt]");
+        HtmlNodeCollection? images =
+            cell.SelectNodes(".//img[@alt]");
 
         if (images is not null)
         {
             foreach (HtmlNode image in images)
             {
-                string alternativeText = TextNormalizer.Clean(
-                    image.GetAttributeValue("alt", string.Empty));
+                string alternativeText =
+                    TextNormalizer.Clean(
+                        image.GetAttributeValue(
+                            "alt",
+                            string.Empty));
 
-                if (!string.IsNullOrWhiteSpace(alternativeText))
+                if (!string.IsNullOrWhiteSpace(
+                        alternativeText))
                 {
                     contents.Add(alternativeText);
                 }
@@ -138,6 +171,7 @@ internal sealed class ForecastRowParser : IForecastRowParser
 
         return string.Join(
             " | ",
-            contents.Distinct(StringComparer.OrdinalIgnoreCase));
+            contents.Distinct(
+                StringComparer.OrdinalIgnoreCase));
     }
 }
