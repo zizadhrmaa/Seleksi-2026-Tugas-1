@@ -25,8 +25,12 @@ internal sealed class PortScraper : IPortScraper
     public async Task<IReadOnlyList<PortData>> ScrapeAsync(
         CancellationToken cancellationToken = default)
     {
-        string html =
-            await _httpFetcher.GetHtmlAsync(_portListUri, cancellationToken);
+        HttpFetchResult fetchResult =
+            await _httpFetcher.GetHtmlAsync(
+                _portListUri,
+                cancellationToken);
+
+        string html = fetchResult.Html;
 
         HtmlDocument document = new();
         document.LoadHtml(html);
