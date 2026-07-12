@@ -1,6 +1,8 @@
+using System.Diagnostics;
 using BmkgScraper.Http;
 using BmkgScraper.Models;
 using BmkgScraper.Parsers;
+using BmkgScraper.Validation;
 using HtmlAgilityPack;
 
 namespace BmkgScraper.Scrapers;
@@ -9,13 +11,34 @@ internal sealed class ForecastScraper : IForecastScraper
 {
     private readonly IHttpFetcher _httpFetcher;
     private readonly IForecastRowParser _rowParser;
+    private readonly IForecastSeriesValidator _seriesValidator;
+    private readonly int _maxContentAttempts;
+    private readonly TimeSpan _contentRetryDelay;
 
     public ForecastScraper(
         IHttpFetcher httpFetcher,
-        IForecastRowParser rowParser)
+        IForecastRowParser rowParser,
+        IForecastSeriesValidator seriesValidator,
+        int maxContentAttempts,
+        TimeSpan contentRetryDelay)
     {
+        if (maxContentAttempts <= 0)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(maxContentAttempts));
+        }
+
+        if (contentRetryDelay < TimeSpan.Zero)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(contentRetryDelay));
+        }
+
         _httpFetcher = httpFetcher;
         _rowParser = rowParser;
+        _seriesValidator = seriesValidator;
+        _maxContentAttempts = maxContentAttempts;
+        _contentRetryDelay = contentRetryDelay;
     }
 
     public async Task<ForecastScrapeResult> ScrapeAsync(
@@ -23,24 +46,97 @@ internal sealed class ForecastScraper : IForecastScraper
         ScrapeBatchContext batch,
         CancellationToken cancellationToken = default)
     {
-        string html = await _httpFetcher.GetHtmlAsync(
-            new Uri(port.DetailUrl),
-            cancellationToken);
+        Stopwatch stopwatch = Stopwatch.StartNew();
+        int totalAttemptCount = 0;
+        HttpFetchResult? lastFetchResult = null;
+        HtmlNodeCollection? rows = null;
+        string lastHtml = string.Empty;
 
-        HtmlDocument document = new();
-        document.LoadHtml(html);
+        for (int contentAttempt = 1;
+             contentAttempt <= _maxContentAttempts;
+             contentAttempt++)
+        {
+            try
+            {
+                lastFetchResult = await _httpFetcher.GetHtmlAsync(
+                    new Uri(port.DetailUrl),
+                    cancellationToken);
+            }
+            catch (HttpFetchException exception)
+            {
+                stopwatch.Stop();
 
-        HtmlNodeCollection? rows =
-            document.DocumentNode.SelectNodes("//table//tr[td]");
+                return CreatePortFailureResult(
+                    port,
+                    batch,
+                    ScrapeErrorCodes.HttpRequestFailed,
+                    exception.Message,
+                    totalAttemptCount + exception.AttemptCount,
+                    exception.StatusCode is null
+                        ? null
+                        : (int)exception.StatusCode,
+                    stopwatch.ElapsedMilliseconds,
+                    tableRowCount: null);
+            }
+
+            totalAttemptCount += lastFetchResult.AttemptCount;
+            lastHtml = lastFetchResult.Html;
+
+            HtmlDocument document = new();
+            document.LoadHtml(lastHtml);
+
+            rows = document.DocumentNode.SelectNodes(
+                "//table//tr[td]");
+
+            if (rows is not null && rows.Count > 0)
+            {
+                break;
+            }
+
+            if (contentAttempt < _maxContentAttempts)
+            {
+                await Task.Delay(
+                    _contentRetryDelay,
+                    cancellationToken);
+            }
+        }
 
         if (rows is null || rows.Count == 0)
         {
-            throw new InvalidOperationException(
-                $"Tidak ditemukan data prakiraan untuk {port.PortName}.");
+            stopwatch.Stop();
+
+            bool sourceStillLoading =
+                IsPageStillLoading(lastHtml);
+
+            string errorCode = sourceStillLoading
+                ? ScrapeErrorCodes.SourcePageLoading
+                : ScrapeErrorCodes.ForecastTableNotFound;
+
+            string message = sourceStillLoading
+                ? "Halaman masih menampilkan status loading setelah " +
+                  "percobaan ulang."
+                : "Tabel prakiraan tidak ditemukan pada halaman sumber.";
+
+            return CreatePortFailureResult(
+                port,
+                batch,
+                errorCode,
+                message,
+                totalAttemptCount,
+                lastFetchResult is null
+                    ? null
+                    : (int)lastFetchResult.StatusCode,
+                stopwatch.ElapsedMilliseconds,
+                tableRowCount: 0);
         }
+
+        HttpFetchResult fetchResult = lastFetchResult ??
+            throw new InvalidOperationException(
+                "Metadata HTTP tidak tersedia setelah halaman berhasil diproses.");
 
         List<ForecastData> forecasts = [];
         List<ScrapeErrorData> errors = [];
+        int nonEmptyRowCount = 0;
 
         DateTimeOffset extractedAt =
             DateTimeOffset.UtcNow.ToOffset(
@@ -54,6 +150,8 @@ internal sealed class ForecastScraper : IForecastScraper
             {
                 continue;
             }
+
+            nonEmptyRowCount++;
 
             ForecastRowParseResult parseResult = _rowParser.Parse(
                 row,
@@ -71,29 +169,98 @@ internal sealed class ForecastScraper : IForecastScraper
                 port,
                 batch,
                 index + 1,
-                parseResult));
+                parseResult,
+                rows.Count));
         }
 
-        if (forecasts.Count == 0 && errors.Count == 0)
+        if (nonEmptyRowCount == 0)
         {
-            errors.Add(new ScrapeErrorData
-            {
-                BatchId = batch.BatchId,
-                PortCode = port.PortCode,
-                PortName = port.PortName,
-                ErrorScope = "PORT",
-                RowIndex = null,
-                Message =
-                    "Halaman tidak menyediakan data prakiraan " +
-                    "yang dapat diproses.",
-                RawData = null,
-                OccurredAt =
-                    DateTimeOffset.UtcNow.ToOffset(
-                        batch.BatchStartedAt.Offset)
-            });
+            errors.Add(CreatePortError(
+                port,
+                batch,
+                ScrapeErrorCodes.AllRowsEmpty,
+                "Seluruh baris pada tabel prakiraan kosong.",
+                totalAttemptCount,
+                (int)fetchResult.StatusCode,
+                stopwatch.ElapsedMilliseconds,
+                rows.Count));
+        }
+        else if (forecasts.Count == 0)
+        {
+            errors.Add(CreatePortError(
+                port,
+                batch,
+                ScrapeErrorCodes.AllRowsInvalid,
+                "Seluruh baris prakiraan gagal diproses.",
+                totalAttemptCount,
+                (int)fetchResult.StatusCode,
+                stopwatch.ElapsedMilliseconds,
+                rows.Count));
         }
 
-        return new ForecastScrapeResult(forecasts, errors);
+        IReadOnlyList<string> seriesQualityFlags =
+            forecasts.Count == 0
+                ? []
+                : _seriesValidator.Validate(forecasts);
+
+        stopwatch.Stop();
+
+        return new ForecastScrapeResult(
+            forecasts,
+            errors,
+            seriesQualityFlags,
+            totalAttemptCount,
+            (int)fetchResult.StatusCode,
+            stopwatch.ElapsedMilliseconds,
+            rows.Count);
+    }
+
+    private static ForecastScrapeResult CreatePortFailureResult(
+        PortData port,
+        ScrapeBatchContext batch,
+        string errorCode,
+        string message,
+        int attemptCount,
+        int? httpStatusCode,
+        long durationMilliseconds,
+        int? tableRowCount)
+    {
+        ScrapeErrorData error = CreatePortError(
+            port,
+            batch,
+            errorCode,
+            message,
+            attemptCount,
+            httpStatusCode,
+            durationMilliseconds,
+            tableRowCount);
+
+        return new ForecastScrapeResult(
+            [],
+            [error],
+            [],
+            attemptCount,
+            httpStatusCode,
+            durationMilliseconds,
+            tableRowCount ?? 0);
+    }
+
+    private static bool IsPageStillLoading(string html)
+    {
+        if (string.IsNullOrWhiteSpace(html))
+        {
+            return false;
+        }
+
+        return html.Contains(
+                   "Loading...",
+                   StringComparison.OrdinalIgnoreCase) ||
+               html.Contains(
+                   "loading",
+                   StringComparison.OrdinalIgnoreCase) &&
+               !html.Contains(
+                   "<table",
+                   StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool IsEmptyRow(HtmlNode row)
@@ -124,7 +291,8 @@ internal sealed class ForecastScraper : IForecastScraper
         PortData port,
         ScrapeBatchContext batch,
         int rowIndex,
-        ForecastRowParseResult parseResult)
+        ForecastRowParseResult parseResult,
+        int tableRowCount)
     {
         return new ScrapeErrorData
         {
@@ -132,11 +300,48 @@ internal sealed class ForecastScraper : IForecastScraper
             PortCode = port.PortCode,
             PortName = port.PortName,
             ErrorScope = "ROW",
+            ErrorCode =
+                parseResult.ErrorCode ??
+                ScrapeErrorCodes.RowParseFailed,
             RowIndex = rowIndex,
             Message =
                 parseResult.ErrorMessage ??
                 "Unknown row parsing error.",
             RawData = parseResult.RawRowText,
+            HttpStatusCode = null,
+            AttemptCount = null,
+            DurationMilliseconds = null,
+            TableRowCount = tableRowCount,
+            OccurredAt =
+                DateTimeOffset.UtcNow.ToOffset(
+                    batch.BatchStartedAt.Offset)
+        };
+    }
+
+    private static ScrapeErrorData CreatePortError(
+        PortData port,
+        ScrapeBatchContext batch,
+        string errorCode,
+        string message,
+        int attemptCount,
+        int? httpStatusCode,
+        long durationMilliseconds,
+        int? tableRowCount)
+    {
+        return new ScrapeErrorData
+        {
+            BatchId = batch.BatchId,
+            PortCode = port.PortCode,
+            PortName = port.PortName,
+            ErrorScope = "PORT",
+            ErrorCode = errorCode,
+            RowIndex = null,
+            Message = message,
+            RawData = null,
+            HttpStatusCode = httpStatusCode,
+            AttemptCount = attemptCount,
+            DurationMilliseconds = durationMilliseconds,
+            TableRowCount = tableRowCount,
             OccurredAt =
                 DateTimeOffset.UtcNow.ToOffset(
                     batch.BatchStartedAt.Offset)
