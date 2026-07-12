@@ -27,6 +27,7 @@ internal sealed record TideParseResult(
 
 internal sealed record ForecastRowParseResult(
     ForecastData? Forecast,
+    string? ErrorCode,
     string? ErrorMessage,
     string? RawRowText)
 {
@@ -34,20 +35,34 @@ internal sealed record ForecastRowParseResult(
 
     public static ForecastRowParseResult Success(ForecastData forecast)
     {
-        return new ForecastRowParseResult(forecast, null, null);
+        return new ForecastRowParseResult(
+            forecast,
+            null,
+            null,
+            null);
     }
 
     public static ForecastRowParseResult Failure(
+        string errorCode,
         string errorMessage,
         string rawRowText)
     {
-        return new ForecastRowParseResult(null, errorMessage, rawRowText);
+        return new ForecastRowParseResult(
+            null,
+            errorCode,
+            errorMessage,
+            rawRowText);
     }
 }
 
 internal sealed record ForecastScrapeResult(
     IReadOnlyList<ForecastData> Forecasts,
-    IReadOnlyList<ScrapeErrorData> Errors);
+    IReadOnlyList<ScrapeErrorData> Errors,
+    IReadOnlyList<string> SeriesQualityFlags,
+    int AttemptCount,
+    int? HttpStatusCode,
+    long DurationMilliseconds,
+    int TableRowCount);
 
 internal sealed class ScrapeErrorData
 {
@@ -63,6 +78,9 @@ internal sealed class ScrapeErrorData
     [JsonPropertyName("error_scope")]
     public required string ErrorScope { get; init; }
 
+    [JsonPropertyName("error_code")]
+    public required string ErrorCode { get; init; }
+
     [JsonPropertyName("row_index")]
     public int? RowIndex { get; init; }
 
@@ -71,6 +89,18 @@ internal sealed class ScrapeErrorData
 
     [JsonPropertyName("raw_data")]
     public string? RawData { get; init; }
+
+    [JsonPropertyName("http_status_code")]
+    public int? HttpStatusCode { get; init; }
+
+    [JsonPropertyName("attempt_count")]
+    public int? AttemptCount { get; init; }
+
+    [JsonPropertyName("duration_ms")]
+    public long? DurationMilliseconds { get; init; }
+
+    [JsonPropertyName("table_row_count")]
+    public int? TableRowCount { get; init; }
 
     [JsonPropertyName("occurred_at")]
     public DateTimeOffset OccurredAt { get; init; }
