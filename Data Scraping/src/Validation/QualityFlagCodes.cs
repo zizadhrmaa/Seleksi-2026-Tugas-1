@@ -17,6 +17,9 @@ internal static class QualityFlagCodes
     public const string ForecastStale =
         "FORECAST_STALE";
 
+    public const string ForecastPeriodLagged =
+        "FORECAST_PERIOD_LAGGED";
+
     public const string GustLowerThanWindSpeed =
         "GUST_LOWER_THAN_WIND_SPEED";
 
@@ -29,9 +32,27 @@ internal static class QualityFlagCodes
     public const string NegativeCurrentSpeed =
         "NEGATIVE_CURRENT_SPEED";
 
+    public const string CurrentSpeedOutOfRange =
+        "CURRENT_SPEED_OUT_OF_RANGE";
+
+    public const string CurrentSpeedSpike =
+        "CURRENT_SPEED_SPIKE";
+
     public const string HumidityOutOfRange =
         "HUMIDITY_OUT_OF_RANGE";
 
     public const string TemperatureOutOfRange =
         "TEMPERATURE_OUT_OF_RANGE";
+
+    public const string UnexpectedForecastCount =
+        "UNEXPECTED_FORECAST_COUNT";
+
+    public const string DuplicateForecastTime =
+        "DUPLICATE_FORECAST_TIME";
+
+    public const string ForecastTimeNotSorted =
+        "FORECAST_TIME_NOT_SORTED";
+
+    public const string ForecastTimeGap =
+        "FORECAST_TIME_GAP";
 }
