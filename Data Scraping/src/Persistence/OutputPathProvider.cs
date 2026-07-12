@@ -16,44 +16,76 @@ internal sealed class OutputPathProvider
 
     public string GetBatchMetadataPath(string batchId)
     {
-        return Path.Combine(GetBatchDirectory(batchId), "batch.json");
+        return Path.Combine(
+            EnsureBatchDirectory(batchId),
+            "batch.json");
     }
 
     public string GetBatchErrorsPath(string batchId)
     {
-        return Path.Combine(GetBatchDirectory(batchId), "errors.json");
+        return Path.Combine(
+            EnsureBatchDirectory(batchId),
+            "errors.json");
     }
 
     public string GetSelectedPortsPath(string batchId)
     {
         return Path.Combine(
-            GetBatchDirectory(batchId),
+            EnsureBatchDirectory(batchId),
             "selected_ports.json");
     }
 
     public string GetPortResultsPath(string batchId)
     {
         return Path.Combine(
-            GetBatchDirectory(batchId),
+            EnsureBatchDirectory(batchId),
             "port_results.json");
     }
 
-    public string GetPortForecastPath(string batchId, string portCode)
+    public string GetQualitySummaryPath(string batchId)
+    {
+        return Path.Combine(
+            EnsureBatchDirectory(batchId),
+            "quality_summary.json");
+    }
+
+    public string GetAnomaliesPath(string batchId)
+    {
+        return Path.Combine(
+            EnsureBatchDirectory(batchId),
+            "anomalies.json");
+    }
+
+    public string GetPortForecastPath(
+        string batchId,
+        string portCode)
     {
         string safePortCode = SanitizeFileName(portCode);
 
         return Path.Combine(
-            GetBatchDirectory(batchId),
+            EnsureBatchDirectory(batchId),
             "forecasts",
             $"{safePortCode}.json");
     }
 
-    private string GetBatchDirectory(string batchId)
+    public bool BatchExists(string batchId)
     {
-        string batchDirectory = Path.Combine(
+        return Directory.Exists(
+            GetBatchDirectoryPath(batchId));
+    }
+
+    public string GetBatchDirectoryPath(string batchId)
+    {
+        return Path.Combine(
             _dataDirectory,
             "batches",
             SanitizeFileName(batchId));
+    }
+
+    private string EnsureBatchDirectory(string batchId)
+    {
+        string batchDirectory =
+            GetBatchDirectoryPath(batchId);
 
         Directory.CreateDirectory(batchDirectory);
         return batchDirectory;
@@ -61,7 +93,8 @@ internal sealed class OutputPathProvider
 
     private static string ResolveDataDirectory()
     {
-        DirectoryInfo? currentDirectory = new(AppContext.BaseDirectory);
+        DirectoryInfo? currentDirectory =
+            new(AppContext.BaseDirectory);
 
         while (currentDirectory is not null)
         {
@@ -70,7 +103,9 @@ internal sealed class OutputPathProvider
                     StringComparison.OrdinalIgnoreCase))
             {
                 string dataDirectory =
-                    Path.Combine(currentDirectory.FullName, "data");
+                    Path.Combine(
+                        currentDirectory.FullName,
+                        "data");
 
                 Directory.CreateDirectory(dataDirectory);
                 return dataDirectory;
@@ -90,7 +125,9 @@ internal sealed class OutputPathProvider
 
         char[] sanitizedCharacters = value
             .Select(character =>
-                invalidCharacters.Contains(character) ? '-' : character)
+                invalidCharacters.Contains(character)
+                    ? '-'
+                    : character)
             .ToArray();
 
         return new string(sanitizedCharacters).Trim();
