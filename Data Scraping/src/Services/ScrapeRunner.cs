@@ -526,15 +526,38 @@ internal sealed class ScrapeRunner
                 rowWarningCount +
                 result.SeriesQualityFlags.Count;
 
+            int previousAttemptCount =
+                isSourceRetry
+                    ? previousResult?.AttemptCount ?? 0
+                    : 0;
+
+            long previousDurationMilliseconds =
+                isSourceRetry
+                    ? previousResult?.DurationMilliseconds ?? 0
+                    : 0;
+
+            int totalAttemptCount =
+                previousAttemptCount + result.AttemptCount;
+
+            long totalDurationMilliseconds =
+                previousDurationMilliseconds +
+                result.DurationMilliseconds;
+
+            IReadOnlyList<ScrapeErrorData> accumulatedErrors =
+                AccumulateErrorDiagnostics(
+                    result.Errors,
+                    previousAttemptCount,
+                    previousDurationMilliseconds);
+
             string portStatus = ResolvePortStatus(
                 result.Forecasts.Count,
-                result.Errors,
+                accumulatedErrors,
                 portWarningCount);
 
             ReplacePortErrors(
                 preparedRun.Errors,
                 port.PortCode,
-                result.Errors);
+                accumulatedErrors);
 
             PortScrapeResultData portResult = new()
             {
@@ -543,24 +566,17 @@ internal sealed class ScrapeRunner
                 PortName = port.PortName,
                 Status = portStatus,
                 ForecastCount = result.Forecasts.Count,
-                ErrorCount = result.Errors.Count,
+                ErrorCount = accumulatedErrors.Count,
                 QualityWarningCount = portWarningCount,
                 SeriesQualityFlags =
                     result.SeriesQualityFlags,
-                AttemptCount =
-                    result.AttemptCount +
-                    (isSourceRetry
-                        ? previousResult?.AttemptCount ?? 0
-                        : 0),
+                AttemptCount = totalAttemptCount,
                 RetryCount =
                     (previousResult?.RetryCount ?? 0) +
                     (isSourceRetry ? 1 : 0),
                 HttpStatusCode = result.HttpStatusCode,
                 DurationMilliseconds =
-                    result.DurationMilliseconds +
-                    (isSourceRetry
-                        ? previousResult?.DurationMilliseconds ?? 0
-                        : 0),
+                    totalDurationMilliseconds,
                 ProcessedAt =
                     DateTimeOffset.UtcNow.ToOffset(
                         _localOffset)
@@ -572,7 +588,7 @@ internal sealed class ScrapeRunner
 
             PrintPortResult(
                 result.Forecasts.Count,
-                result.Errors.Count,
+                accumulatedErrors.Count,
                 portWarningCount,
                 portStatus,
                 result.SeriesQualityFlags);
@@ -959,6 +975,45 @@ internal sealed class ScrapeRunner
                 DateTimeOffset.UtcNow.ToOffset(
                     _localOffset)
         };
+    }
+
+    private static IReadOnlyList<ScrapeErrorData>
+        AccumulateErrorDiagnostics(
+            IReadOnlyList<ScrapeErrorData> errors,
+            int previousAttemptCount,
+            long previousDurationMilliseconds)
+    {
+        if (previousAttemptCount <= 0 &&
+            previousDurationMilliseconds <= 0)
+        {
+            return errors;
+        }
+
+        return errors
+            .Select(error => new ScrapeErrorData
+            {
+                BatchId = error.BatchId,
+                PortCode = error.PortCode,
+                PortName = error.PortName,
+                ErrorScope = error.ErrorScope,
+                ErrorCode = error.ErrorCode,
+                RowIndex = error.RowIndex,
+                Message = error.Message,
+                RawData = error.RawData,
+                HttpStatusCode = error.HttpStatusCode,
+                AttemptCount = error.AttemptCount is null
+                    ? null
+                    : previousAttemptCount +
+                      error.AttemptCount.Value,
+                DurationMilliseconds =
+                    error.DurationMilliseconds is null
+                        ? null
+                        : previousDurationMilliseconds +
+                          error.DurationMilliseconds.Value,
+                TableRowCount = error.TableRowCount,
+                OccurredAt = error.OccurredAt
+            })
+            .ToList();
     }
 
     private static void ReplacePortErrors(
