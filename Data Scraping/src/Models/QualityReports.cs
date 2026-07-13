@@ -21,6 +21,9 @@ internal sealed class QualityFlagSummaryData
 
     [JsonPropertyName("affected_port_count")]
     public int AffectedPortCount { get; init; }
+
+    [JsonPropertyName("anomaly_point_count")]
+    public int AnomalyPointCount { get; init; }
 }
 
 internal sealed class QualitySummaryData
@@ -57,6 +60,9 @@ internal sealed class QualitySummaryData
 
     [JsonPropertyName("anomaly_count")]
     public int AnomalyCount { get; init; }
+
+    [JsonPropertyName("counting_notes")]
+    public IReadOnlyList<string> CountingNotes { get; init; } = [];
 
     [JsonPropertyName("flags")]
     public IReadOnlyList<QualityFlagSummaryData> Flags { get; init; } = [];
