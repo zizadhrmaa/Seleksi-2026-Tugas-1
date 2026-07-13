@@ -83,6 +83,23 @@ internal sealed class QualityReportBuilder
             forecasts,
             portResults);
 
+        IReadOnlyList<AnomalyData> orderedAnomalies = anomalies
+            .DistinctBy(CreateAnomalyKey)
+            .OrderBy(anomaly => anomaly.PortName)
+            .ThenBy(anomaly => anomaly.ForecastAt)
+            .ThenBy(anomaly => anomaly.QualityFlag)
+            .ThenBy(anomaly => anomaly.FieldName)
+            .ToList();
+
+        Dictionary<QualityFlagKey, int> anomalyPointCounts =
+            orderedAnomalies
+                .GroupBy(anomaly => new QualityFlagKey(
+                    anomaly.QualityFlag,
+                    anomaly.Scope))
+                .ToDictionary(
+                    group => group.Key,
+                    group => group.Count());
+
         IReadOnlyList<QualityFlagSummaryData> flagSummaries =
             flagAccumulators
                 .OrderBy(pair => pair.Key.Code)
@@ -98,17 +115,12 @@ internal sealed class QualityReportBuilder
                     AffectedRecordCount =
                         pair.Value.AffectedRecordKeys.Count,
                     AffectedPortCount =
-                        pair.Value.AffectedPortCodes.Count
+                        pair.Value.AffectedPortCodes.Count,
+                    AnomalyPointCount =
+                        anomalyPointCounts.GetValueOrDefault(
+                            pair.Key)
                 })
                 .ToList();
-
-        IReadOnlyList<AnomalyData> orderedAnomalies = anomalies
-            .DistinctBy(CreateAnomalyKey)
-            .OrderBy(anomaly => anomaly.PortName)
-            .ThenBy(anomaly => anomaly.ForecastAt)
-            .ThenBy(anomaly => anomaly.QualityFlag)
-            .ThenBy(anomaly => anomaly.FieldName)
-            .ToList();
 
         int infoCount = flagSummaries
             .Where(flag => flag.Severity ==
@@ -139,6 +151,15 @@ internal sealed class QualityReportBuilder
             WarningCount = warningCount,
             CriticalCount = criticalCount,
             AnomalyCount = orderedAnomalies.Count,
+            CountingNotes =
+            [
+                "Untuk scope ROW, occurrence_count menghitung record " +
+                "forecast yang memiliki quality flag.",
+                "Untuk scope SERIES, occurrence_count menghitung seri " +
+                "pelabuhan yang memiliki flag; anomaly_point_count " +
+                "menghitung titik anomali rinci yang ditulis ke " +
+                "anomalies.json."
+            ],
             Flags = flagSummaries
         };
 
