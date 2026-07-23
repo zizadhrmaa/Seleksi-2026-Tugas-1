@@ -1,0 +1,10 @@
+# Temporary files produced during export and restore.
+export/database_export/.fact_observation.full.tmp.sql
+export/database_export/.warehouse_restore_combined.tmp.sql
+
+# PostgreSQL and PowerShell local runtime files.
+*.log
+*.tmp
+*.bak
+postgres.password*
+pipeline.settings.local.json

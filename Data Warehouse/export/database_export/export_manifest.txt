@@ -1,0 +1,26 @@
+NDBC DATA WAREHOUSE EXPORT
+GeneratedAtUtc=2026-07-23T15:16:10.7129395Z
+Database=ndbc
+Schema=ndbc_dw
+DimDateRows=82
+DimTimeRows=201
+DimStationRows=90
+DimScrapeRunRows=3
+FactScrapeRunRows=3
+FactObservationRows=573475
+EtlBatchRows=3
+MaximumChunkMegabyte=45
+
+FILES
+00_warehouse_pre.sql|39048
+10_dimensions_and_small_facts.sql|52670
+20_fact_observation_001.sql|47393930
+20_fact_observation_002.sql|47392888
+20_fact_observation_003.sql|36225386
+98_identity_sequences.sql|1180
+99_warehouse_post.sql|7335
+
+FACT_OBSERVATION_CHUNKS
+20_fact_observation_001.sql|rows=208122|bytes=47393930
+20_fact_observation_002.sql|rows=207065|bytes=47392888
+20_fact_observation_003.sql|rows=158288|bytes=36225386

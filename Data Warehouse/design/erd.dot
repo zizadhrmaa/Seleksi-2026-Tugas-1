@@ -1,0 +1,155 @@
+digraph ERD {
+graph [rankdir=LR, bgcolor="white", pad="0.3", nodesep="0.45", ranksep="1.0", splines=polyline, fontname="Arial"];
+node [fontname="Arial", fontsize=9];
+edge [fontname="Arial", fontsize=8, color="#444444"];
+dim_date [shape=plain, label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+<TR><TD BGCOLOR="#DCEBFA" COLSPAN="2"><B>dim_date</B></TD></TR>
+<TR><TD ALIGN="LEFT"><B>PK</B> <U>date_key</U></TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT"><B>AK</B> full_date</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">day_of_month</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">iso_day_of_week</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">day_name</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">week_of_year</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">month_number</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">month_name</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">quarter_number</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">year_number</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">is_weekend</TD><TD ALIGN="LEFT"></TD></TR>
+</TABLE>>];
+dim_time [shape=plain, label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+<TR><TD BGCOLOR="#DCEBFA" COLSPAN="2"><B>dim_time</B></TD></TR>
+<TR><TD ALIGN="LEFT"><B>PK</B> <U>time_key</U></TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT"><B>AK</B> full_time</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">hour_number</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">minute_number</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">second_number</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">minute_of_day</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">time_bucket</TD><TD ALIGN="LEFT"></TD></TR>
+</TABLE>>];
+dim_station [shape=plain, label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+<TR><TD BGCOLOR="#DCEBFA" COLSPAN="2"><B>dim_station</B></TD></TR>
+<TR><TD ALIGN="LEFT"><B>PK</B> <U>station_key</U></TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT"><B>AK</B> station_id</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">station_name</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">location</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">device_type</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">payload</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">latitude</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">longitude</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">water_depth_meter</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">station_status</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">provider_name</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">provider_base_url</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">detail_url</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">realtime_data_url</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">source_created_at</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">source_updated_at</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">dw_created_at</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">dw_updated_at</TD><TD ALIGN="LEFT"></TD></TR>
+</TABLE>>];
+dim_scrape_run [shape=plain, label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+<TR><TD BGCOLOR="#DCEBFA" COLSPAN="2"><B>dim_scrape_run</B></TD></TR>
+<TR><TD ALIGN="LEFT"><B>PK</B> <U>scrape_run_key</U></TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT"><B>AK</B> scrape_run_id</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">started_at</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">finished_at</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">target_met</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">station_list_source_url</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">source_output_directory</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">source_loaded_at</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">dw_created_at</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">dw_updated_at</TD><TD ALIGN="LEFT"></TD></TR>
+</TABLE>>];
+fact_observation [shape=plain, label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+<TR><TD BGCOLOR="#FCE8D5" COLSPAN="2"><B>fact_observation</B></TD></TR>
+<TR><TD ALIGN="LEFT"><B>PK</B> <U>observation_fact_key</U></TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT"><B>FK</B> station_key</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT"><B>FK</B> date_key</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT"><B>FK</B> time_key</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT"><B>FK</B> first_seen_scrape_run_key</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT"><B>AK</B> observed_at_utc</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">wind_direction_degree</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">wind_speed_meter_per_second</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">wind_gust_meter_per_second</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">wave_height_meter</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">dominant_wave_period_second</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">average_wave_period_second</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">mean_wave_direction_degree</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">sea_surface_temperature_celsius</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">measurement_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">has_wind_measurement</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">has_wave_measurement</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">has_temperature_measurement</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">source_row_number</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">source_url</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">source_extracted_at</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">source_loaded_at</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">dw_loaded_at</TD><TD ALIGN="LEFT"></TD></TR>
+</TABLE>>];
+fact_scrape_run [shape=plain, label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+<TR><TD BGCOLOR="#FCE8D5" COLSPAN="2"><B>fact_scrape_run</B></TD></TR>
+<TR><TD ALIGN="LEFT"><B>PK</B> <U>scrape_run_fact_key</U></TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT"><B>FK/AK</B> scrape_run_key</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT"><B>FK</B> started_date_key</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT"><B>FK</B> started_time_key</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT"><B>FK</B> finished_date_key</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT"><B>FK</B> finished_time_key</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">duration_second</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">target_station_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">source_candidate_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">processed_candidate_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">successful_station_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">skipped_non_buoy_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">skipped_no_data_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">failed_attempt_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">source_observation_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">duplicate_observation_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">dw_loaded_at</TD><TD ALIGN="LEFT"></TD></TR>
+</TABLE>>];
+etl_batch [shape=plain, label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+<TR><TD BGCOLOR="#ECECEC" COLSPAN="2"><B>etl_batch</B></TD></TR>
+<TR><TD ALIGN="LEFT"><B>PK</B> <U>etl_batch_id</U></TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">started_at</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">finished_at</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">status</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">source_station_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">source_scrape_run_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">source_observation_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">inserted_station_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">inserted_scrape_run_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">inserted_observation_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">total_station_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">total_scrape_run_count</TD><TD ALIGN="LEFT"></TD></TR>
+<TR><TD ALIGN="LEFT">total_observation_count</TD><TD ALIGN="LEFT"></TD></TR>
+</TABLE>>];
+r_station [shape=diamond, label="MEASURED_BY", fontsize=7, width=0.9, height=0.45, fixedsize=false, style=filled, fillcolor="#FFF6CC"];
+fact_observation -> r_station [dir=none, label="N, total", penwidth=1.4];
+r_station -> dim_station [dir=none, label="1, partial"];
+r_obs_date [shape=diamond, label="OBSERVED_ON", fontsize=7, width=0.9, height=0.45, fixedsize=false, style=filled, fillcolor="#FFF6CC"];
+fact_observation -> r_obs_date [dir=none, label="N, total", penwidth=1.4];
+r_obs_date -> dim_date [dir=none, label="1, partial"];
+r_obs_time [shape=diamond, label="OBSERVED_AT", fontsize=7, width=0.9, height=0.45, fixedsize=false, style=filled, fillcolor="#FFF6CC"];
+fact_observation -> r_obs_time [dir=none, label="N, total", penwidth=1.4];
+r_obs_time -> dim_time [dir=none, label="1, partial"];
+r_first_run [shape=diamond, label="FIRST_SEEN_IN", fontsize=7, width=0.9, height=0.45, fixedsize=false, style=filled, fillcolor="#FFF6CC"];
+fact_observation -> r_first_run [dir=none, label="N, total", penwidth=1.4];
+r_first_run -> dim_scrape_run [dir=none, label="1, partial"];
+r_run [shape=diamond, label="DESCRIBES", fontsize=7, width=0.9, height=0.45, fixedsize=false, style=filled, fillcolor="#FFF6CC"];
+fact_scrape_run -> r_run [dir=none, label="1, total", penwidth=1.4];
+r_run -> dim_scrape_run [dir=none, label="1, total"];
+r_start_date [shape=diamond, label="STARTED_ON", fontsize=7, width=0.9, height=0.45, fixedsize=false, style=filled, fillcolor="#FFF6CC"];
+fact_scrape_run -> r_start_date [dir=none, label="N, total", penwidth=1.4];
+r_start_date -> dim_date [dir=none, label="1, partial"];
+r_start_time [shape=diamond, label="STARTED_AT", fontsize=7, width=0.9, height=0.45, fixedsize=false, style=filled, fillcolor="#FFF6CC"];
+fact_scrape_run -> r_start_time [dir=none, label="N, total", penwidth=1.4];
+r_start_time -> dim_time [dir=none, label="1, partial"];
+r_finish_date [shape=diamond, label="FINISHED_ON", fontsize=7, width=0.9, height=0.45, fixedsize=false, style=filled, fillcolor="#FFF6CC"];
+fact_scrape_run -> r_finish_date [dir=none, label="N, total", penwidth=1.4];
+r_finish_date -> dim_date [dir=none, label="1, partial"];
+r_finish_time [shape=diamond, label="FINISHED_AT", fontsize=7, width=0.9, height=0.45, fixedsize=false, style=filled, fillcolor="#FFF6CC"];
+fact_scrape_run -> r_finish_time [dir=none, label="N, total", penwidth=1.4];
+r_finish_time -> dim_time [dir=none, label="1, partial"];
+etl_note [shape=note, label="Audit refresh independen\nTidak memiliki FK ke fact", style=filled, fillcolor="#FFFBEA"];
+etl_batch -> etl_note [style=dashed, arrowhead=none];
+label="Conceptual ERD Data Warehouse NDBC\nPK digarisbawahi; AK = alternate/candidate key; FK = foreign key"; labelloc=t; fontsize=16;
+}
