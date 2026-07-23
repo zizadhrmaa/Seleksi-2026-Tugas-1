@@ -1,1331 +1,639 @@
-using System.Diagnostics;
-using System.Globalization;
-using BmkgScraper.Models;
-using BmkgScraper.Persistence;
-using BmkgScraper.Scrapers;
+using NdbcScraper.Configuration;
+using NdbcScraper.Models;
+using NdbcScraper.Persistence;
+using NdbcScraper.Scrapers;
 
-namespace BmkgScraper.Services;
+namespace NdbcScraper.Services;
 
 internal sealed class ScrapeRunner
 {
-    private readonly IPortScraper _portScraper;
-    private readonly IForecastScraper _forecastScraper;
-    private readonly IDataWriter _dataWriter;
-    private readonly IDataReader _dataReader;
-    private readonly OutputPathProvider _outputPathProvider;
-    private readonly QualityReportBuilder _qualityReportBuilder;
-    private readonly TimeSpan _requestDelay;
-    private readonly TimeSpan _sourceRetryDelay;
-    private readonly TimeSpan _localOffset;
+    private const string StationListSourceUrl =
+        "https://www.ndbc.noaa.gov/to_station.shtml";
+
+    private readonly IStationListScraper _stationListScraper;
+    private readonly IStationDataScraper _stationDataScraper;
+    private readonly RobotsPolicyChecker _robotsPolicyChecker;
+    private readonly JsonFileStore _fileStore;
+    private readonly OutputPathProvider _outputPaths;
 
     public ScrapeRunner(
-        IPortScraper portScraper,
-        IForecastScraper forecastScraper,
-        IDataWriter dataWriter,
-        IDataReader dataReader,
-        OutputPathProvider outputPathProvider,
-        QualityReportBuilder qualityReportBuilder,
-        TimeSpan requestDelay,
-        TimeSpan sourceRetryDelay,
-        TimeSpan localOffset)
+        IStationListScraper stationListScraper,
+        IStationDataScraper stationDataScraper,
+        RobotsPolicyChecker robotsPolicyChecker,
+        JsonFileStore fileStore,
+        OutputPathProvider outputPaths)
     {
-        if (requestDelay < TimeSpan.Zero)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(requestDelay));
-        }
-
-        if (sourceRetryDelay < TimeSpan.Zero)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(sourceRetryDelay));
-        }
-
-        _portScraper = portScraper;
-        _forecastScraper = forecastScraper;
-        _dataWriter = dataWriter;
-        _dataReader = dataReader;
-        _outputPathProvider = outputPathProvider;
-        _qualityReportBuilder = qualityReportBuilder;
-        _requestDelay = requestDelay;
-        _sourceRetryDelay = sourceRetryDelay;
-        _localOffset = localOffset;
+        _stationListScraper = stationListScraper;
+        _stationDataScraper = stationDataScraper;
+        _robotsPolicyChecker = robotsPolicyChecker;
+        _fileStore = fileStore;
+        _outputPaths = outputPaths;
     }
 
-    public async Task RunAsync(
-        ScrapeRunOptions options,
+    public async Task<bool> RunAsync(
+        ScrapeOptions options,
         CancellationToken cancellationToken = default)
     {
-        PreparedRun preparedRun =
-            await PrepareRunAsync(
-                options,
-                cancellationToken);
+        ScrapeProgress progress;
+        List<StationData> stations;
+        List<SkippedStationData> skippedStations;
+        List<ScrapeErrorData> errors;
 
-        string batchId = preparedRun.Batch.BatchId;
-        string metadataPath =
-            _outputPathProvider.GetBatchMetadataPath(batchId);
-        string selectedPortsPath =
-            _outputPathProvider.GetSelectedPortsPath(batchId);
-        string errorsPath =
-            _outputPathProvider.GetBatchErrorsPath(batchId);
-        string portResultsPath =
-            _outputPathProvider.GetPortResultsPath(batchId);
-        string qualitySummaryPath =
-            _outputPathProvider.GetQualitySummaryPath(batchId);
-        string anomaliesPath =
-            _outputPathProvider.GetAnomaliesPath(batchId);
-
-        bool sourceRetryCompleted =
-            preparedRun.SourceRetryCompleted;
-
-        await PersistCheckpointAsync(
-            preparedRun,
-            sourceRetryCompleted,
-            BatchStatusCodes.Running,
-            metadataPath,
-            errorsPath,
-            portResultsPath,
-            cancellationToken);
-
-        PrintRunHeader(preparedRun);
-
-        try
+        if (options.Resume)
         {
-            HashSet<string> processedPortCodes = preparedRun.PortResults
-                .Select(result => result.PortCode)
-                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            _outputPaths.EnsureDirectories();
 
-            List<PortData> pendingPorts = preparedRun.SelectedPorts
-                .Where(port =>
-                    !processedPortCodes.Contains(port.PortCode))
-                .ToList();
+            progress = await _fileStore.ReadAsync<ScrapeProgress>(
+                _outputPaths.ProgressFile,
+                cancellationToken) ?? throw new InvalidOperationException(
+                "Checkpoint tidak ditemukan. Jalankan tanpa --resume terlebih dahulu.");
 
-            for (int index = 0;
-                 index < pendingPorts.Count;
-                 index++)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
+            stations = await _fileStore.ReadAsync<List<StationData>>(
+                _outputPaths.StationsFile,
+                cancellationToken) ?? new List<StationData>();
 
-                PortData port = pendingPorts[index];
-                int completedBefore = preparedRun.PortResults.Count;
+            skippedStations = await _fileStore.ReadAsync<List<SkippedStationData>>(
+                _outputPaths.SkippedStationsFile,
+                cancellationToken) ?? new List<SkippedStationData>();
 
-                Console.WriteLine();
-                Console.WriteLine(
-                    $"[{completedBefore + 1}/" +
-                    $"{preparedRun.SelectedPorts.Count}] " +
-                    port.PortName);
+            errors = await _fileStore.ReadAsync<List<ScrapeErrorData>>(
+                _outputPaths.ErrorsFile,
+                cancellationToken) ?? new List<ScrapeErrorData>();
 
-                await ProcessPortAsync(
-                    preparedRun,
-                    port,
-                    isSourceRetry: false,
-                    cancellationToken);
+            MigrateLegacyNoDataErrors(
+                progress.ScrapeRunId,
+                skippedStations,
+                errors);
 
-                await PersistCheckpointAsync(
-                    preparedRun,
-                    sourceRetryCompleted,
-                    BatchStatusCodes.Running,
-                    metadataPath,
-                    errorsPath,
-                    portResultsPath,
-                    cancellationToken);
-
-                if (index < pendingPorts.Count - 1)
-                {
-                    await DelayBetweenPortsAsync(
-                        cancellationToken);
-                }
-            }
-
-            if (!sourceRetryCompleted)
-            {
-                List<PortData> retryPorts =
-                    ResolveSourceRetryPorts(preparedRun);
-
-                if (retryPorts.Count > 0)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine(
-                        $"Menunggu " +
-                        $"{_sourceRetryDelay.TotalSeconds:0.##} detik " +
-                        $"sebelum mencoba ulang {retryPorts.Count} " +
-                        "pelabuhan dengan sumber kosong...");
-
-                    if (_sourceRetryDelay > TimeSpan.Zero)
-                    {
-                        await Task.Delay(
-                            _sourceRetryDelay,
-                            cancellationToken);
-                    }
-
-                    for (int index = 0;
-                         index < retryPorts.Count;
-                         index++)
-                    {
-                        cancellationToken.ThrowIfCancellationRequested();
-
-                        PortData port = retryPorts[index];
-
-                        Console.WriteLine();
-                        Console.WriteLine(
-                            $"[Retry {index + 1}/" +
-                            $"{retryPorts.Count}] {port.PortName}");
-
-                        await ProcessPortAsync(
-                            preparedRun,
-                            port,
-                            isSourceRetry: true,
-                            cancellationToken);
-
-                        await PersistCheckpointAsync(
-                            preparedRun,
-                            false,
-                            BatchStatusCodes.Running,
-                            metadataPath,
-                            errorsPath,
-                            portResultsPath,
-                            cancellationToken);
-
-                        if (index < retryPorts.Count - 1)
-                        {
-                            await DelayBetweenPortsAsync(
-                                cancellationToken);
-                        }
-                    }
-                }
-
-                sourceRetryCompleted = true;
-
-                await PersistCheckpointAsync(
-                    preparedRun,
-                    sourceRetryCompleted,
-                    BatchStatusCodes.Running,
-                    metadataPath,
-                    errorsPath,
-                    portResultsPath,
-                    cancellationToken);
-            }
-
-            QualityReportResult qualityReports =
-                await BuildQualityReportsAsync(
-                    preparedRun,
-                    cancellationToken);
-
-            await _dataWriter.WriteAsync(
-                qualityReports.Summary,
-                qualitySummaryPath,
+            await RepairResumeStateAsync(
+                progress,
+                stations,
                 cancellationToken);
-
-            await _dataWriter.WriteAsync(
-                qualityReports.Anomalies,
-                anomaliesPath,
-                cancellationToken);
-
-            ScrapeBatchData finalBatchData = BuildBatchData(
-                preparedRun,
-                sourceRetryCompleted,
-                ResolveFinalBatchStatus(
-                    preparedRun.Errors,
-                    preparedRun.PortResults,
-                    qualityReports.Summary.TotalQualityFlagCount),
-                qualityReports.Summary.TotalQualityFlagCount,
-                finishedAt:
-                    DateTimeOffset.UtcNow.ToOffset(_localOffset));
-
-            await _dataWriter.WriteAsync(
-                finalBatchData,
-                metadataPath,
-                cancellationToken);
-
-            PrintSummary(
-                finalBatchData,
-                metadataPath,
-                selectedPortsPath,
-                portResultsPath,
-                qualitySummaryPath,
-                anomaliesPath);
-        }
-        catch (OperationCanceledException)
-        {
-            ScrapeBatchData cancelledBatchData = BuildBatchData(
-                preparedRun,
-                sourceRetryCompleted,
-                BatchStatusCodes.Cancelled,
-                qualityWarningCountOverride: null,
-                finishedAt:
-                    DateTimeOffset.UtcNow.ToOffset(_localOffset));
-
-            await _dataWriter.WriteAsync(
-                preparedRun.Errors,
-                errorsPath,
-                CancellationToken.None);
-
-            await _dataWriter.WriteAsync(
-                preparedRun.PortResults,
-                portResultsPath,
-                CancellationToken.None);
-
-            await _dataWriter.WriteAsync(
-                cancelledBatchData,
-                metadataPath,
-                CancellationToken.None);
-
-            throw;
-        }
-    }
-
-    private async Task<PreparedRun> PrepareRunAsync(
-        ScrapeRunOptions options,
-        CancellationToken cancellationToken)
-    {
-        return options.RunMode switch
-        {
-            ScrapeRunMode.New =>
-                await PrepareNewRunAsync(
-                    options,
-                    cancellationToken),
-
-            ScrapeRunMode.RetryBatch =>
-                await PrepareRetryRunAsync(
-                    options.ReferenceBatchId,
-                    cancellationToken),
-
-            ScrapeRunMode.Resume =>
-                await PrepareResumeRunAsync(
-                    options.ReferenceBatchId,
-                    cancellationToken),
-
-            _ => throw new ArgumentOutOfRangeException(
-                nameof(options.RunMode))
-        };
-    }
-
-    private async Task<PreparedRun> PrepareNewRunAsync(
-        ScrapeRunOptions options,
-        CancellationToken cancellationToken)
-    {
-        Console.WriteLine(
-            "Mengambil daftar pelabuhan dari BMKG...");
-
-        IReadOnlyList<PortData> ports =
-            await _portScraper.ScrapeAsync(
-                cancellationToken);
-
-        if (ports.Count == 0)
-        {
-            throw new InvalidOperationException(
-                "Tidak ditemukan tautan pelabuhan. " +
-                "Struktur HTML mungkin berubah.");
-        }
-
-        await _dataWriter.WriteAsync(
-            ports,
-            _outputPathProvider.GetPortsPath(),
-            cancellationToken);
-
-        ScrapeBatchContext batch =
-            ScrapeBatchContext.Create(_localOffset);
-
-        IReadOnlyList<PortData> selectedPorts = SelectPorts(
-            ports,
-            options.PortLimit,
-            options.SelectionMode);
-
-        string selectionMode =
-            selectedPorts.Count == ports.Count
-                ? "ALL"
-                : options.SelectionMode
-                    .ToString()
-                    .ToUpperInvariant();
-
-        await _dataWriter.WriteAsync(
-            selectedPorts,
-            _outputPathProvider.GetSelectedPortsPath(
-                batch.BatchId),
-            cancellationToken);
-
-        return new PreparedRun(
-            batch,
-            selectedPorts,
-            [],
-            [],
-            ScrapeRunTypeCodes.Full,
-            null,
-            selectionMode,
-            SourceRetryCompleted: false,
-            IsResume: false);
-    }
-
-    private async Task<PreparedRun> PrepareRetryRunAsync(
-        string? sourceBatchId,
-        CancellationToken cancellationToken)
-    {
-        string validatedBatchId =
-            ValidateExistingBatchId(sourceBatchId);
-
-        IReadOnlyList<PortData> sourceSelectedPorts =
-            await ReadRequiredListAsync<PortData>(
-                _outputPathProvider.GetSelectedPortsPath(
-                    validatedBatchId),
-                "selected_ports.json",
-                cancellationToken);
-
-        IReadOnlyList<PortScrapeResultData> sourcePortResults =
-            await ReadRequiredListAsync<PortScrapeResultData>(
-                _outputPathProvider.GetPortResultsPath(
-                    validatedBatchId),
-                "port_results.json",
-                cancellationToken);
-
-        HashSet<string> retryPortCodes = sourcePortResults
-            .Where(result => result.Status is
-                PortScrapeStatusCodes.SourceUnavailable or
-                PortScrapeStatusCodes.Failed or
-                PortScrapeStatusCodes.PartialSuccess)
-            .Select(result => result.PortCode)
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
-
-        List<PortData> selectedPorts = sourceSelectedPorts
-            .Where(port => retryPortCodes.Contains(port.PortCode))
-            .ToList();
-
-        if (selectedPorts.Count == 0)
-        {
-            throw new InvalidOperationException(
-                $"Batch {validatedBatchId} tidak memiliki pelabuhan " +
-                "yang perlu dicoba ulang.");
-        }
-
-        ScrapeBatchContext batch =
-            ScrapeBatchContext.Create(_localOffset);
-
-        await _dataWriter.WriteAsync(
-            selectedPorts,
-            _outputPathProvider.GetSelectedPortsPath(
-                batch.BatchId),
-            cancellationToken);
-
-        return new PreparedRun(
-            batch,
-            selectedPorts,
-            [],
-            [],
-            ScrapeRunTypeCodes.Retry,
-            validatedBatchId,
-            SelectionMode: "RETRY",
-            SourceRetryCompleted: false,
-            IsResume: false);
-    }
-
-    private async Task<PreparedRun> PrepareResumeRunAsync(
-        string? batchId,
-        CancellationToken cancellationToken)
-    {
-        string validatedBatchId =
-            ValidateExistingBatchId(batchId);
-
-        IReadOnlyList<PortData> selectedPorts =
-            await ReadRequiredListAsync<PortData>(
-                _outputPathProvider.GetSelectedPortsPath(
-                    validatedBatchId),
-                "selected_ports.json",
-                cancellationToken);
-
-        List<PortScrapeResultData> portResults =
-            await ReadOptionalListAsync<PortScrapeResultData>(
-                _outputPathProvider.GetPortResultsPath(
-                    validatedBatchId),
-                cancellationToken);
-
-        List<ScrapeErrorData> errors =
-            await ReadOptionalListAsync<ScrapeErrorData>(
-                _outputPathProvider.GetBatchErrorsPath(
-                    validatedBatchId),
-                cancellationToken);
-
-        ScrapeBatchData? existingMetadata =
-            await _dataReader.ReadAsync<ScrapeBatchData>(
-                _outputPathProvider.GetBatchMetadataPath(
-                    validatedBatchId),
-                cancellationToken);
-
-        bool allPortsProcessed =
-            portResults
-                .Select(result => result.PortCode)
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .Count() >= selectedPorts.Count;
-
-        if (existingMetadata is not null &&
-            IsFinalBatchStatus(existingMetadata.Status) &&
-            allPortsProcessed)
-        {
-            throw new InvalidOperationException(
-                $"Batch {validatedBatchId} sudah selesai. " +
-                "Gunakan --retry-batch untuk mencoba ulang " +
-                "pelabuhan bermasalah sebagai batch baru.");
-        }
-
-        DateTimeOffset startedAt =
-            ResolveExistingBatchStart(
-                validatedBatchId,
-                existingMetadata,
-                portResults);
-
-        ScrapeBatchContext batch = new(
-            validatedBatchId,
-            startedAt);
-
-        return new PreparedRun(
-            batch,
-            selectedPorts,
-            errors,
-            portResults,
-            existingMetadata?.RunType ??
-                ScrapeRunTypeCodes.Full,
-            existingMetadata?.ParentBatchId,
-            existingMetadata?.SelectionMode ?? "UNKNOWN",
-            existingMetadata?.SourceRetryCompleted ?? false,
-            IsResume: true);
-    }
-
-    private async Task ProcessPortAsync(
-        PreparedRun preparedRun,
-        PortData port,
-        bool isSourceRetry,
-        CancellationToken cancellationToken)
-    {
-        Stopwatch stopwatch = Stopwatch.StartNew();
-
-        PortScrapeResultData? previousResult =
-            preparedRun.PortResults.FirstOrDefault(result =>
-                result.PortCode.Equals(
-                    port.PortCode,
-                    StringComparison.OrdinalIgnoreCase));
-
-        try
-        {
-            ForecastScrapeResult result =
-                await _forecastScraper.ScrapeAsync(
-                    port,
-                    preparedRun.Batch,
-                    cancellationToken);
-
-            stopwatch.Stop();
-
-            await _dataWriter.WriteAsync(
-                result.Forecasts,
-                _outputPathProvider.GetPortForecastPath(
-                    preparedRun.Batch.BatchId,
-                    port.PortCode),
-                cancellationToken);
-
-            int rowWarningCount = result.Forecasts.Sum(
-                forecast => forecast.QualityFlags.Count);
-
-            int portWarningCount =
-                rowWarningCount +
-                result.SeriesQualityFlags.Count;
-
-            int previousAttemptCount =
-                isSourceRetry
-                    ? previousResult?.AttemptCount ?? 0
-                    : 0;
-
-            long previousDurationMilliseconds =
-                isSourceRetry
-                    ? previousResult?.DurationMilliseconds ?? 0
-                    : 0;
-
-            int totalAttemptCount =
-                previousAttemptCount + result.AttemptCount;
-
-            long totalDurationMilliseconds =
-                previousDurationMilliseconds +
-                result.DurationMilliseconds;
-
-            IReadOnlyList<ScrapeErrorData> accumulatedErrors =
-                AccumulateErrorDiagnostics(
-                    result.Errors,
-                    previousAttemptCount,
-                    previousDurationMilliseconds);
-
-            string portStatus = ResolvePortStatus(
-                result.Forecasts.Count,
-                accumulatedErrors,
-                portWarningCount);
-
-            ReplacePortErrors(
-                preparedRun.Errors,
-                port.PortCode,
-                accumulatedErrors);
-
-            PortScrapeResultData portResult = new()
-            {
-                BatchId = preparedRun.Batch.BatchId,
-                PortCode = port.PortCode,
-                PortName = port.PortName,
-                Status = portStatus,
-                ForecastCount = result.Forecasts.Count,
-                ErrorCount = accumulatedErrors.Count,
-                QualityWarningCount = portWarningCount,
-                SeriesQualityFlags =
-                    result.SeriesQualityFlags,
-                AttemptCount = totalAttemptCount,
-                RetryCount =
-                    (previousResult?.RetryCount ?? 0) +
-                    (isSourceRetry ? 1 : 0),
-                HttpStatusCode = result.HttpStatusCode,
-                DurationMilliseconds =
-                    totalDurationMilliseconds,
-                ProcessedAt =
-                    DateTimeOffset.UtcNow.ToOffset(
-                        _localOffset)
-            };
-
-            UpsertPortResult(
-                preparedRun.PortResults,
-                portResult);
-
-            PrintPortResult(
-                result.Forecasts.Count,
-                accumulatedErrors.Count,
-                portWarningCount,
-                portStatus,
-                result.SeriesQualityFlags);
-        }
-        catch (Exception exception)
-            when (exception is not OperationCanceledException)
-        {
-            stopwatch.Stop();
-
-            ScrapeErrorData error = CreatePortError(
-                preparedRun.Batch,
-                port,
-                exception.Message,
-                stopwatch.ElapsedMilliseconds);
-
-            ReplacePortErrors(
-                preparedRun.Errors,
-                port.PortCode,
-                [error]);
-
-            await _dataWriter.WriteAsync(
-                Array.Empty<ForecastData>(),
-                _outputPathProvider.GetPortForecastPath(
-                    preparedRun.Batch.BatchId,
-                    port.PortCode),
-                cancellationToken);
-
-            UpsertPortResult(
-                preparedRun.PortResults,
-                new PortScrapeResultData
-                {
-                    BatchId = preparedRun.Batch.BatchId,
-                    PortCode = port.PortCode,
-                    PortName = port.PortName,
-                    Status = PortScrapeStatusCodes.Failed,
-                    ForecastCount = 0,
-                    ErrorCount = 1,
-                    QualityWarningCount = 0,
-                    SeriesQualityFlags = [],
-                    AttemptCount =
-                        isSourceRetry
-                            ? previousResult?.AttemptCount ?? 0
-                            : 0,
-                    RetryCount =
-                        (previousResult?.RetryCount ?? 0) +
-                        (isSourceRetry ? 1 : 0),
-                    HttpStatusCode = null,
-                    DurationMilliseconds =
-                        stopwatch.ElapsedMilliseconds +
-                        (isSourceRetry
-                            ? previousResult?.DurationMilliseconds ?? 0
-                            : 0),
-                    ProcessedAt =
-                        DateTimeOffset.UtcNow.ToOffset(
-                            _localOffset)
-                });
 
             Console.WriteLine(
-                $"Gagal teknis: {exception.Message}");
+                $"Melanjutkan run {progress.ScrapeRunId}. " +
+                $"Stasiun berhasil: {progress.SuccessfulStationIds.Count}/" +
+                $"{progress.TargetStationCount}.");
         }
-    }
-
-    private async Task<QualityReportResult> BuildQualityReportsAsync(
-        PreparedRun preparedRun,
-        CancellationToken cancellationToken)
-    {
-        List<ForecastData> forecasts = [];
-
-        foreach (PortScrapeResultData portResult in
-                 preparedRun.PortResults)
+        else
         {
-            if (portResult.ForecastCount <= 0)
+            _outputPaths.PrepareNewRun();
+
+            DateTimeOffset startedAt = DateTimeOffset.UtcNow;
+            progress = new ScrapeProgress
+            {
+                ScrapeRunId = CreateRunId(startedAt),
+                StartedAt = startedAt,
+                TargetStationCount = options.TargetStationCount,
+                SourceCandidateCount = 0,
+                ProcessedStationIds = new List<string>(),
+                SuccessfulStationIds = new List<string>(),
+                SkippedNonBuoyCount = 0,
+                SkippedNoDataCount = 0,
+                FailedAttemptCount = 0,
+                TotalObservationCount = 0,
+                DuplicateObservationCount = 0,
+                LastUpdatedAt = startedAt
+            };
+
+            stations = new List<StationData>();
+            skippedStations = new List<SkippedStationData>();
+            errors = new List<ScrapeErrorData>();
+        }
+
+        Console.WriteLine("Memeriksa kebijakan robots.txt...");
+        string? robotsWarning = await _robotsPolicyChecker.CheckAsync(
+            cancellationToken);
+
+        if (!string.IsNullOrWhiteSpace(robotsWarning))
+        {
+            Console.WriteLine($"Peringatan: {robotsWarning}");
+        }
+
+        Console.WriteLine("Mengambil daftar stasiun NDBC...");
+        IReadOnlyList<StationCandidate> candidates =
+            await _stationListScraper.ScrapeAsync(cancellationToken);
+
+        progress.SourceCandidateCount = candidates.Count;
+        progress.LastUpdatedAt = DateTimeOffset.UtcNow;
+        await SaveCheckpointAsync(
+            progress,
+            stations,
+            skippedStations,
+            errors,
+            cancellationToken);
+
+        HashSet<string> processedStationIds = new(
+            progress.ProcessedStationIds,
+            StringComparer.OrdinalIgnoreCase);
+
+        HashSet<string> attemptedThisExecution = new(
+            StringComparer.OrdinalIgnoreCase);
+
+        for (int candidateIndex = 0;
+             candidateIndex < candidates.Count;
+             candidateIndex++)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (progress.SuccessfulStationIds.Count >=
+                progress.TargetStationCount)
+            {
+                break;
+            }
+
+            StationCandidate candidate = candidates[candidateIndex];
+
+            if (processedStationIds.Contains(candidate.StationId) ||
+                !attemptedThisExecution.Add(candidate.StationId))
             {
                 continue;
             }
 
-            string forecastPath =
-                _outputPathProvider.GetPortForecastPath(
-                    preparedRun.Batch.BatchId,
-                    portResult.PortCode);
+            Console.Write(
+                $"[Kandidat {candidateIndex + 1}/{candidates.Count} | " +
+                $"Berhasil {progress.SuccessfulStationIds.Count}/" +
+                $"{progress.TargetStationCount}] " +
+                $"Memproses {candidate.StationId}... ");
 
-            List<ForecastData>? portForecasts =
-                await _dataReader.ReadAsync<List<ForecastData>>(
-                    forecastPath,
+            StationScrapeResult result =
+                await _stationDataScraper.ScrapeAsync(
+                    candidate,
+                    progress.ScrapeRunId,
                     cancellationToken);
 
-            if (portForecasts is null)
+            errors.AddRange(result.Errors);
+
+            switch (result.Outcome)
             {
-                throw new InvalidDataException(
-                    "File forecast tidak ditemukan untuk pelabuhan " +
-                    $"{portResult.PortCode}.");
+                case StationScrapeOutcomes.Success:
+                    RemoveSkippedStation(
+                        skippedStations,
+                        candidate.StationId);
+
+                    await HandleSuccessAsync(
+                        result,
+                        progress,
+                        stations,
+                        processedStationIds,
+                        cancellationToken);
+
+                    Console.WriteLine(
+                        $"berhasil, {result.Observations.Count} observasi.");
+                    break;
+
+                case StationScrapeOutcomes.NotBuoy:
+                    MarkProcessed(
+                        progress,
+                        processedStationIds,
+                        candidate.StationId);
+                    progress.SkippedNonBuoyCount++;
+
+                    UpsertSkippedStation(
+                        skippedStations,
+                        CreateSkippedStation(
+                            progress.ScrapeRunId,
+                            candidate,
+                            result,
+                            SkippedStationReasonCodes.NotBuoy,
+                            "Stasiun tidak teridentifikasi sebagai buoy.",
+                            null));
+
+                    Console.WriteLine("dilewati, bukan buoy.");
+                    break;
+
+                case StationScrapeOutcomes.NoRealtimeData:
+                    MarkProcessed(
+                        progress,
+                        processedStationIds,
+                        candidate.StationId);
+                    progress.SkippedNoDataCount++;
+
+                    UpsertSkippedStation(
+                        skippedStations,
+                        CreateSkippedStation(
+                            progress.ScrapeRunId,
+                            candidate,
+                            result,
+                            SkippedStationReasonCodes.NoRealtimeMeteorologicalData,
+                            "File standard meteorological real-time tidak tersedia.",
+                            404));
+
+                    Console.WriteLine(
+                        "dilewati, file meteorologi real-time tidak tersedia.");
+                    break;
+
+                case StationScrapeOutcomes.NoRelevantMeasurements:
+                    MarkProcessed(
+                        progress,
+                        processedStationIds,
+                        candidate.StationId);
+                    progress.SkippedNoDataCount++;
+
+                    UpsertSkippedStation(
+                        skippedStations,
+                        CreateSkippedStation(
+                            progress.ScrapeRunId,
+                            candidate,
+                            result,
+                            SkippedStationReasonCodes.NoRelevantMeasurements,
+                            "Data tersedia, tetapi tidak memuat pengukuran angin, " +
+                            "gelombang, atau suhu laut yang dapat digunakan.",
+                            null));
+
+                    Console.WriteLine(
+                        "dilewati, pengukuran relevan tidak tersedia.");
+                    break;
+
+                default:
+                    progress.FailedAttemptCount++;
+                    Console.WriteLine(
+                        "gagal, detail dicatat pada errors.json.");
+                    break;
             }
 
-            forecasts.AddRange(portForecasts);
+            progress.LastUpdatedAt = DateTimeOffset.UtcNow;
+            await SaveCheckpointAsync(
+                progress,
+                stations,
+                skippedStations,
+                errors,
+                cancellationToken);
         }
 
-        return _qualityReportBuilder.Build(
-            preparedRun.Batch.BatchId,
-            forecasts,
-            preparedRun.PortResults,
-            DateTimeOffset.UtcNow.ToOffset(_localOffset));
-    }
-
-    private async Task PersistCheckpointAsync(
-        PreparedRun preparedRun,
-        bool sourceRetryCompleted,
-        string status,
-        string metadataPath,
-        string errorsPath,
-        string portResultsPath,
-        CancellationToken cancellationToken)
-    {
-        await _dataWriter.WriteAsync(
-            preparedRun.Errors,
-            errorsPath,
+        await WriteCombinedOutputAsync(
+            progress,
+            stations,
+            skippedStations,
+            errors,
             cancellationToken);
 
-        await _dataWriter.WriteAsync(
-            preparedRun.PortResults,
-            portResultsPath,
-            cancellationToken);
+        bool targetMet = progress.SuccessfulStationIds.Count >=
+                         progress.TargetStationCount;
 
-        ScrapeBatchData checkpointData = BuildBatchData(
-            preparedRun,
-            sourceRetryCompleted,
-            status,
-            qualityWarningCountOverride: null,
-            finishedAt:
-                status == BatchStatusCodes.Running
-                    ? null
-                    : DateTimeOffset.UtcNow.ToOffset(
-                        _localOffset));
+        DateTimeOffset finishedAt = DateTimeOffset.UtcNow;
 
-        await _dataWriter.WriteAsync(
-            checkpointData,
-            metadataPath,
-            cancellationToken);
-    }
-
-    private ScrapeBatchData BuildBatchData(
-        PreparedRun preparedRun,
-        bool sourceRetryCompleted,
-        string status,
-        int? qualityWarningCountOverride,
-        DateTimeOffset? finishedAt)
-    {
-        int successfulPortCount =
-            preparedRun.PortResults.Count(result =>
-                result.Status is
-                    PortScrapeStatusCodes.Success or
-                    PortScrapeStatusCodes.SuccessWithWarnings);
-
-        int partialSuccessPortCount =
-            preparedRun.PortResults.Count(result =>
-                result.Status ==
-                PortScrapeStatusCodes.PartialSuccess);
-
-        int sourceUnavailablePortCount =
-            preparedRun.PortResults.Count(result =>
-                result.Status ==
-                PortScrapeStatusCodes.SourceUnavailable);
-
-        int technicalFailedPortCount =
-            preparedRun.PortResults.Count(result =>
-                result.Status ==
-                PortScrapeStatusCodes.Failed);
-
-        int processedPortCount = preparedRun.PortResults
-            .Select(result => result.PortCode)
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .Count();
-
-        int qualityWarningCount =
-            qualityWarningCountOverride ??
-            preparedRun.PortResults.Sum(result =>
-                result.QualityWarningCount);
-
-        int technicalErrorCount = preparedRun.Errors.Count(error =>
-            !IsSourceUnavailableError(error.ErrorCode));
-
-        return new ScrapeBatchData
+        ScrapeRunReport report = new()
         {
-            BatchId = preparedRun.Batch.BatchId,
-            BatchStartedAt =
-                preparedRun.Batch.BatchStartedAt,
-            BatchFinishedAt = finishedAt,
-            RunType = preparedRun.RunType,
-            ParentBatchId = preparedRun.ParentBatchId,
-            SelectionMode = preparedRun.SelectionMode,
-            RequestedPortCount =
-                preparedRun.SelectedPorts.Count,
-            ProcessedPortCount = processedPortCount,
-            RemainingPortCount = Math.Max(
-                0,
-                preparedRun.SelectedPorts.Count -
-                processedPortCount),
-            SuccessfulPortCount = successfulPortCount,
-            PartialSuccessPortCount =
-                partialSuccessPortCount,
-            SourceUnavailablePortCount =
-                sourceUnavailablePortCount,
-            TechnicalFailedPortCount =
-                technicalFailedPortCount,
-            FailedPortCount =
-                sourceUnavailablePortCount +
-                technicalFailedPortCount,
-            ForecastCount = preparedRun.PortResults.Sum(result =>
-                result.ForecastCount),
-            ErrorCount = preparedRun.Errors.Count,
-            TechnicalErrorCount = technicalErrorCount,
-            QualityWarningCount = qualityWarningCount,
-            SourceRetryCompleted = sourceRetryCompleted,
-            Status = status
+            ScrapeRunId = progress.ScrapeRunId,
+            StartedAt = progress.StartedAt,
+            FinishedAt = finishedAt,
+            TargetStationCount = progress.TargetStationCount,
+            TargetMet = targetMet,
+            SourceCandidateCount = progress.SourceCandidateCount,
+            ProcessedCandidateCount = progress.ProcessedStationIds.Count,
+            SuccessfulStationCount = progress.SuccessfulStationIds.Count,
+            SkippedNonBuoyCount = progress.SkippedNonBuoyCount,
+            SkippedNoDataCount = progress.SkippedNoDataCount,
+            FailedAttemptCount = progress.FailedAttemptCount,
+            TotalObservationCount = progress.TotalObservationCount,
+            DuplicateObservationCount = progress.DuplicateObservationCount,
+            StationListSourceUrl = StationListSourceUrl,
+            OutputDirectory = _outputPaths.DataDirectory
         };
-    }
 
-    private string ValidateExistingBatchId(string? batchId)
-    {
-        if (string.IsNullOrWhiteSpace(batchId))
+        await _fileStore.WriteAsync(
+            _outputPaths.ReportFile,
+            report,
+            cancellationToken);
+
+        Console.WriteLine();
+        Console.WriteLine($"Run ID: {progress.ScrapeRunId}");
+        Console.WriteLine(
+            $"Stasiun berhasil: {progress.SuccessfulStationIds.Count}/" +
+            $"{progress.TargetStationCount}");
+        Console.WriteLine($"Stasiun dilewati: {skippedStations.Count}");
+        Console.WriteLine($"Kesalahan tercatat: {errors.Count}");
+        Console.WriteLine(
+            $"Total observasi: {progress.TotalObservationCount}");
+        Console.WriteLine($"Output: {_outputPaths.DataDirectory}");
+
+        if (!targetMet)
         {
-            throw new ArgumentException(
-                "Batch ID tidak boleh kosong.");
+            Console.WriteLine(
+                "Target belum tercapai karena kandidat yang memenuhi kriteria " +
+                "telah habis atau sebagian request gagal. Jalankan kembali " +
+                "dengan --resume untuk mencoba ulang kegagalan sementara.");
         }
 
-        string normalizedBatchId = batchId.Trim();
-
-        if (!_outputPathProvider.BatchExists(
-                normalizedBatchId))
-        {
-            throw new DirectoryNotFoundException(
-                $"Batch {normalizedBatchId} tidak ditemukan.");
-        }
-
-        return normalizedBatchId;
+        return targetMet;
     }
 
-    private async Task<IReadOnlyList<T>> ReadRequiredListAsync<T>(
-        string inputPath,
-        string displayName,
+    private async Task HandleSuccessAsync(
+        StationScrapeResult result,
+        ScrapeProgress progress,
+        List<StationData> stations,
+        HashSet<string> processedStationIds,
         CancellationToken cancellationToken)
     {
-        List<T>? values =
-            await _dataReader.ReadAsync<List<T>>(
-                inputPath,
+        StationData station = result.Station ??
+            throw new InvalidOperationException(
+                "Metadata stasiun tidak tersedia pada hasil yang sukses.");
+
+        string observationFile =
+            _outputPaths.GetStationObservationFile(station.StationId);
+
+        await _fileStore.WriteAsync(
+            observationFile,
+            result.Observations,
+            cancellationToken);
+
+        stations.RemoveAll(existing => existing.StationId.Equals(
+            station.StationId,
+            StringComparison.OrdinalIgnoreCase));
+        stations.Add(station);
+
+        if (!progress.SuccessfulStationIds.Contains(
+            station.StationId,
+            StringComparer.OrdinalIgnoreCase))
+        {
+            progress.SuccessfulStationIds.Add(station.StationId);
+            progress.TotalObservationCount += result.Observations.Count;
+            progress.DuplicateObservationCount += result.DuplicateCount;
+        }
+
+        MarkProcessed(
+            progress,
+            processedStationIds,
+            station.StationId);
+    }
+
+    private async Task SaveCheckpointAsync(
+        ScrapeProgress progress,
+        IReadOnlyList<StationData> stations,
+        IReadOnlyList<SkippedStationData> skippedStations,
+        IReadOnlyList<ScrapeErrorData> errors,
+        CancellationToken cancellationToken)
+    {
+        await _fileStore.WriteAsync(
+            _outputPaths.ProgressFile,
+            progress,
+            cancellationToken);
+
+        await _fileStore.WriteAsync(
+            _outputPaths.StationsFile,
+            stations.OrderBy(station => station.StationId).ToList(),
+            cancellationToken);
+
+        await _fileStore.WriteAsync(
+            _outputPaths.SkippedStationsFile,
+            skippedStations
+                .OrderBy(station => station.StationId)
+                .ToList(),
+            cancellationToken);
+
+        await _fileStore.WriteAsync(
+            _outputPaths.ErrorsFile,
+            errors,
+            cancellationToken);
+    }
+
+    private async Task WriteCombinedOutputAsync(
+        ScrapeProgress progress,
+        IReadOnlyList<StationData> stations,
+        IReadOnlyList<SkippedStationData> skippedStations,
+        IReadOnlyList<ScrapeErrorData> errors,
+        CancellationToken cancellationToken)
+    {
+        await SaveCheckpointAsync(
+            progress,
+            stations,
+            skippedStations,
+            errors,
+            cancellationToken);
+
+        List<(string StationId, string FilePath)> observationFiles =
+            progress.SuccessfulStationIds
+                .OrderBy(stationId => stationId)
+                .Select(stationId => (
+                    StationId: stationId,
+                    FilePath: _outputPaths.GetStationObservationFile(stationId)))
+                .Where(item => File.Exists(item.FilePath))
+                .ToList();
+
+        await _fileStore.WriteCombinedObservationsAsync(
+            _outputPaths.CombinedObservationsFile,
+            observationFiles.Select(item => item.FilePath),
+            cancellationToken);
+
+        ObservationManifestData manifest =
+            await CreateObservationManifestAsync(
+                progress,
+                observationFiles,
                 cancellationToken);
 
-        if (values is null || values.Count == 0)
-        {
-            throw new InvalidDataException(
-                $"{displayName} tidak ditemukan atau kosong.");
-        }
-
-        return values;
-    }
-
-    private async Task<List<T>> ReadOptionalListAsync<T>(
-        string inputPath,
-        CancellationToken cancellationToken)
-    {
-        return await _dataReader.ReadAsync<List<T>>(
-                   inputPath,
-                   cancellationToken)
-               ?? [];
-    }
-
-    private DateTimeOffset ResolveExistingBatchStart(
-        string batchId,
-        ScrapeBatchData? metadata,
-        IReadOnlyList<PortScrapeResultData> portResults)
-    {
-        if (metadata is not null &&
-            metadata.BatchStartedAt != default)
-        {
-            return metadata.BatchStartedAt;
-        }
-
-        if (TryParseBatchStartedAt(
-                batchId,
-                out DateTimeOffset parsedStartedAt))
-        {
-            return parsedStartedAt;
-        }
-
-        if (portResults.Count > 0)
-        {
-            return portResults.Min(result =>
-                result.ProcessedAt);
-        }
-
-        return DateTimeOffset.UtcNow.ToOffset(_localOffset);
-    }
-
-    private bool TryParseBatchStartedAt(
-        string batchId,
-        out DateTimeOffset startedAt)
-    {
-        startedAt = default;
-        string[] components = batchId.Split('-');
-
-        if (components.Length < 4)
-        {
-            return false;
-        }
-
-        string timestamp =
-            $"{components[1]}-{components[2]}";
-
-        bool parsed = DateTime.TryParseExact(
-            timestamp,
-            "yyyyMMdd-HHmmss",
-            CultureInfo.InvariantCulture,
-            DateTimeStyles.None,
-            out DateTime localDateTime);
-
-        if (!parsed)
-        {
-            return false;
-        }
-
-        startedAt = new DateTimeOffset(
-            DateTime.SpecifyKind(
-                localDateTime,
-                DateTimeKind.Unspecified),
-            _localOffset);
-
-        return true;
-    }
-
-    private static List<PortData> ResolveSourceRetryPorts(
-        PreparedRun preparedRun)
-    {
-        HashSet<string> retryPortCodes = preparedRun.PortResults
-            .Where(result =>
-                result.Status ==
-                    PortScrapeStatusCodes.SourceUnavailable &&
-                result.RetryCount == 0)
-            .Select(result => result.PortCode)
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
-
-        return preparedRun.SelectedPorts
-            .Where(port => retryPortCodes.Contains(port.PortCode))
-            .ToList();
-    }
-
-    private async Task DelayBetweenPortsAsync(
-        CancellationToken cancellationToken)
-    {
-        if (_requestDelay <= TimeSpan.Zero)
-        {
-            return;
-        }
-
-        Console.WriteLine(
-            $"Menunggu {_requestDelay.TotalSeconds:0.##} detik...");
-
-        await Task.Delay(
-            _requestDelay,
+        await _fileStore.WriteAsync(
+            _outputPaths.ObservationManifestFile,
+            manifest,
             cancellationToken);
     }
 
-    private ScrapeErrorData CreatePortError(
-        ScrapeBatchContext batch,
-        PortData port,
-        string message,
-        long durationMilliseconds)
+    private async Task<ObservationManifestData> CreateObservationManifestAsync(
+        ScrapeProgress progress,
+        IReadOnlyList<(string StationId, string FilePath)> observationFiles,
+        CancellationToken cancellationToken)
     {
-        return new ScrapeErrorData
-        {
-            BatchId = batch.BatchId,
-            PortCode = port.PortCode,
-            PortName = port.PortName,
-            ErrorScope = "PORT",
-            ErrorCode =
-                ScrapeErrorCodes.UnexpectedPortError,
-            RowIndex = null,
-            Message = message,
-            RawData = null,
-            HttpStatusCode = null,
-            AttemptCount = null,
-            DurationMilliseconds =
-                durationMilliseconds,
-            TableRowCount = null,
-            OccurredAt =
-                DateTimeOffset.UtcNow.ToOffset(
-                    _localOffset)
-        };
-    }
+        List<ObservationFileManifestEntry> entries = new();
 
-    private static IReadOnlyList<ScrapeErrorData>
-        AccumulateErrorDiagnostics(
-            IReadOnlyList<ScrapeErrorData> errors,
-            int previousAttemptCount,
-            long previousDurationMilliseconds)
-    {
-        if (previousAttemptCount <= 0 &&
-            previousDurationMilliseconds <= 0)
+        foreach ((string stationId, string filePath) in observationFiles)
         {
-            return errors;
-        }
+            cancellationToken.ThrowIfCancellationRequested();
 
-        return errors
-            .Select(error => new ScrapeErrorData
+            List<ObservationData> observations =
+                await _fileStore.ReadAsync<List<ObservationData>>(
+                    filePath,
+                    cancellationToken) ?? new List<ObservationData>();
+
+            FileInfo fileInfo = new(filePath);
+            string relativePath = Path.GetRelativePath(
+                    _outputPaths.DataDirectory,
+                    filePath)
+                .Replace(Path.DirectorySeparatorChar, '/')
+                .Replace(Path.AltDirectorySeparatorChar, '/');
+
+            entries.Add(new ObservationFileManifestEntry
             {
-                BatchId = error.BatchId,
-                PortCode = error.PortCode,
-                PortName = error.PortName,
-                ErrorScope = error.ErrorScope,
-                ErrorCode = error.ErrorCode,
-                RowIndex = error.RowIndex,
-                Message = error.Message,
-                RawData = error.RawData,
-                HttpStatusCode = error.HttpStatusCode,
-                AttemptCount = error.AttemptCount is null
+                StationId = stationId,
+                RelativePath = relativePath,
+                ObservationCount = observations.Count,
+                FirstObservedAtUtc = observations.Count == 0
                     ? null
-                    : previousAttemptCount +
-                      error.AttemptCount.Value,
-                DurationMilliseconds =
-                    error.DurationMilliseconds is null
-                        ? null
-                        : previousDurationMilliseconds +
-                          error.DurationMilliseconds.Value,
-                TableRowCount = error.TableRowCount,
-                OccurredAt = error.OccurredAt
-            })
-            .ToList();
-    }
-
-    private static void ReplacePortErrors(
-        List<ScrapeErrorData> errors,
-        string portCode,
-        IReadOnlyList<ScrapeErrorData> replacementErrors)
-    {
-        errors.RemoveAll(error =>
-            string.Equals(
-                error.PortCode,
-                portCode,
-                StringComparison.OrdinalIgnoreCase));
-
-        errors.AddRange(replacementErrors);
-    }
-
-    private static void UpsertPortResult(
-        List<PortScrapeResultData> portResults,
-        PortScrapeResultData replacement)
-    {
-        int existingIndex = portResults.FindIndex(result =>
-            result.PortCode.Equals(
-                replacement.PortCode,
-                StringComparison.OrdinalIgnoreCase));
-
-        if (existingIndex >= 0)
-        {
-            portResults[existingIndex] = replacement;
-        }
-        else
-        {
-            portResults.Add(replacement);
-        }
-    }
-
-    private static string ResolvePortStatus(
-        int forecastCount,
-        IReadOnlyList<ScrapeErrorData> errors,
-        int qualityWarningCount)
-    {
-        if (forecastCount == 0)
-        {
-            bool sourceUnavailable = errors.Count > 0 &&
-                errors.All(error =>
-                    IsSourceUnavailableError(
-                        error.ErrorCode));
-
-            return sourceUnavailable
-                ? PortScrapeStatusCodes.SourceUnavailable
-                : PortScrapeStatusCodes.Failed;
+                    : observations[0].ObservedAtUtc,
+                LastObservedAtUtc = observations.Count == 0
+                    ? null
+                    : observations[^1].ObservedAtUtc,
+                FileSizeBytes = fileInfo.Length
+            });
         }
 
-        if (errors.Count > 0)
+        int manifestObservationCount = entries.Sum(entry =>
+            entry.ObservationCount);
+
+        if (manifestObservationCount != progress.TotalObservationCount)
         {
-            return PortScrapeStatusCodes.PartialSuccess;
+            throw new InvalidOperationException(
+                "Jumlah observasi pada manifest tidak sama dengan checkpoint.");
         }
 
-        return qualityWarningCount > 0
-            ? PortScrapeStatusCodes.SuccessWithWarnings
-            : PortScrapeStatusCodes.Success;
-    }
-
-    private static bool IsSourceUnavailableError(
-        string errorCode)
-    {
-        return errorCode is
-            ScrapeErrorCodes.SourcePageLoading or
-            ScrapeErrorCodes.ForecastTableNotFound or
-            ScrapeErrorCodes.AllRowsEmpty;
-    }
-
-    private static string ResolveFinalBatchStatus(
-        IReadOnlyList<ScrapeErrorData> errors,
-        IReadOnlyList<PortScrapeResultData> portResults,
-        int qualityWarningCount)
-    {
-        bool hasTechnicalFailure = portResults.Any(result =>
-            result.Status == PortScrapeStatusCodes.Failed);
-
-        bool hasTechnicalError = errors.Any(error =>
-            !IsSourceUnavailableError(error.ErrorCode));
-
-        if (hasTechnicalFailure || hasTechnicalError)
+        return new ObservationManifestData
         {
-            return BatchStatusCodes.CompletedWithErrors;
-        }
-
-        bool hasSourceGap = portResults.Any(result =>
-            result.Status ==
-                PortScrapeStatusCodes.SourceUnavailable);
-
-        if (hasSourceGap)
-        {
-            return BatchStatusCodes.CompletedWithSourceGaps;
-        }
-
-        return qualityWarningCount > 0
-            ? BatchStatusCodes.CompletedWithWarnings
-            : BatchStatusCodes.Completed;
-    }
-
-    private static bool IsFinalBatchStatus(string status)
-    {
-        return status is
-            BatchStatusCodes.Completed or
-            BatchStatusCodes.CompletedWithWarnings or
-            BatchStatusCodes.CompletedWithSourceGaps or
-            BatchStatusCodes.CompletedWithErrors;
-    }
-
-    private static IReadOnlyList<PortData> SelectPorts(
-        IReadOnlyList<PortData> ports,
-        int? portLimit,
-        PortSelectionMode selectionMode)
-    {
-        if (portLimit is null ||
-            portLimit >= ports.Count)
-        {
-            return ports;
-        }
-
-        if (portLimit <= 0)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(portLimit));
-        }
-
-        return selectionMode switch
-        {
-            PortSelectionMode.Sequential =>
-                ports.Take(portLimit.Value).ToList(),
-            PortSelectionMode.Spread =>
-                SelectSpreadPorts(ports, portLimit.Value),
-            _ => throw new ArgumentOutOfRangeException(
-                nameof(selectionMode))
+            ScrapeRunId = progress.ScrapeRunId,
+            GeneratedAt = DateTimeOffset.UtcNow,
+            TotalStationCount = entries.Count,
+            TotalObservationCount = manifestObservationCount,
+            CombinedFile = Path.GetFileName(
+                _outputPaths.CombinedObservationsFile) ?? "observations.json",
+            CombinedFileGitIgnored = true,
+            StationFiles = entries
         };
     }
 
-    private static IReadOnlyList<PortData> SelectSpreadPorts(
-        IReadOnlyList<PortData> ports,
-        int portLimit)
+    private async Task RepairResumeStateAsync(
+        ScrapeProgress progress,
+        List<StationData> stations,
+        CancellationToken cancellationToken)
     {
-        if (portLimit == 1)
+        HashSet<string> validSuccessIds = new(
+            StringComparer.OrdinalIgnoreCase);
+
+        foreach (string stationId in progress.SuccessfulStationIds)
         {
-            return [ports[0]];
+            bool hasStationMetadata = stations.Any(station =>
+                station.StationId.Equals(
+                    stationId,
+                    StringComparison.OrdinalIgnoreCase));
+
+            bool hasObservationFile = File.Exists(
+                _outputPaths.GetStationObservationFile(stationId));
+
+            if (hasStationMetadata && hasObservationFile)
+            {
+                validSuccessIds.Add(stationId);
+            }
         }
 
-        List<PortData> selectedPorts = [];
-        double interval =
-            (double)(ports.Count - 1) /
-            (portLimit - 1);
+        HashSet<string> invalidSuccessIds = new(
+            progress.SuccessfulStationIds.Where(stationId =>
+                !validSuccessIds.Contains(stationId)),
+            StringComparer.OrdinalIgnoreCase);
 
-        for (int index = 0;
-             index < portLimit;
-             index++)
+        progress.SuccessfulStationIds.RemoveAll(stationId =>
+            invalidSuccessIds.Contains(stationId));
+
+        progress.ProcessedStationIds.RemoveAll(stationId =>
+            invalidSuccessIds.Contains(stationId));
+
+        stations.RemoveAll(station =>
+            invalidSuccessIds.Contains(station.StationId));
+
+        int observationCount = 0;
+
+        foreach (string stationId in progress.SuccessfulStationIds)
         {
-            int portIndex =
-                (int)Math.Round(index * interval);
+            List<ObservationData> observations =
+                await _fileStore.ReadAsync<List<ObservationData>>(
+                    _outputPaths.GetStationObservationFile(stationId),
+                    cancellationToken) ?? new List<ObservationData>();
 
-            selectedPorts.Add(ports[portIndex]);
+            observationCount += observations.Count;
         }
 
-        return selectedPorts;
+        progress.TotalObservationCount = observationCount;
+        progress.LastUpdatedAt = DateTimeOffset.UtcNow;
     }
 
-    private static void PrintRunHeader(PreparedRun preparedRun)
+    private static SkippedStationData CreateSkippedStation(
+        string scrapeRunId,
+        StationCandidate candidate,
+        StationScrapeResult result,
+        string reasonCode,
+        string message,
+        int? httpStatusCode)
     {
-        Console.WriteLine();
-        Console.WriteLine(
-            $"Batch ID : {preparedRun.Batch.BatchId}");
-        Console.WriteLine(
-            $"Tipe run : {preparedRun.RunType}");
-
-        if (!string.IsNullOrWhiteSpace(
-                preparedRun.ParentBatchId))
+        return new SkippedStationData
         {
-            Console.WriteLine(
-                $"Parent batch : {preparedRun.ParentBatchId}");
+            ScrapeRunId = scrapeRunId,
+            StationId = candidate.StationId,
+            ReasonCode = reasonCode,
+            Message = message,
+            DetailUrl = candidate.DetailUrl,
+            RealtimeDataUrl = result.Station?.RealtimeDataUrl,
+            HttpStatusCode = httpStatusCode,
+            SkippedAt = DateTimeOffset.UtcNow
+        };
+    }
+
+    private static void UpsertSkippedStation(
+        List<SkippedStationData> skippedStations,
+        SkippedStationData skippedStation)
+    {
+        RemoveSkippedStation(
+            skippedStations,
+            skippedStation.StationId);
+        skippedStations.Add(skippedStation);
+    }
+
+    private static void RemoveSkippedStation(
+        List<SkippedStationData> skippedStations,
+        string stationId)
+    {
+        skippedStations.RemoveAll(station =>
+            station.StationId.Equals(
+                stationId,
+                StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static void MigrateLegacyNoDataErrors(
+        string scrapeRunId,
+        List<SkippedStationData> skippedStations,
+        List<ScrapeErrorData> errors)
+    {
+        List<ScrapeErrorData> legacyNoDataErrors = errors
+            .Where(error =>
+                error.ErrorCode.Equals(
+                    ScrapeErrorCodes.RealtimeFileNotFound,
+                    StringComparison.Ordinal) &&
+                !string.IsNullOrWhiteSpace(error.StationId))
+            .ToList();
+
+        foreach (ScrapeErrorData error in legacyNoDataErrors)
+        {
+            UpsertSkippedStation(
+                skippedStations,
+                new SkippedStationData
+                {
+                    ScrapeRunId = scrapeRunId,
+                    StationId = error.StationId!,
+                    ReasonCode =
+                        SkippedStationReasonCodes.NoRealtimeMeteorologicalData,
+                    Message =
+                        "File standard meteorological real-time tidak tersedia.",
+                    DetailUrl = null,
+                    RealtimeDataUrl = error.SourceUrl,
+                    HttpStatusCode = error.HttpStatusCode ?? 404,
+                    SkippedAt = error.OccurredAt
+                });
         }
 
-        Console.WriteLine(
-            $"Mode pemilihan pelabuhan: " +
-            $"{preparedRun.SelectionMode}");
-        Console.WriteLine(
-            $"Pelabuhan yang akan diproses: " +
-            $"{preparedRun.SelectedPorts.Count}");
+        errors.RemoveAll(error =>
+            error.ErrorCode.Equals(
+                ScrapeErrorCodes.RealtimeFileNotFound,
+                StringComparison.Ordinal));
+    }
 
-        if (preparedRun.IsResume)
+    private static void MarkProcessed(
+        ScrapeProgress progress,
+        HashSet<string> processedStationIds,
+        string stationId)
+    {
+        if (processedStationIds.Add(stationId))
         {
-            Console.WriteLine(
-                $"Melanjutkan dari " +
-                $"{preparedRun.PortResults.Count} " +
-                "pelabuhan yang sudah tercatat.");
+            progress.ProcessedStationIds.Add(stationId);
         }
     }
 
-    private static void PrintPortResult(
-        int forecastCount,
-        int errorCount,
-        int qualityWarningCount,
-        string portStatus,
-        IReadOnlyList<string> seriesQualityFlags)
+    private static string CreateRunId(DateTimeOffset startedAt)
     {
-        if (forecastCount == 0)
-        {
-            string failureLabel =
-                portStatus ==
-                    PortScrapeStatusCodes.SourceUnavailable
-                    ? "Sumber tidak tersedia"
-                    : "Gagal teknis";
-
-            Console.WriteLine(
-                $"{failureLabel}: tidak ada record valid, " +
-                $"{errorCount} masalah.");
-        }
-        else
-        {
-            Console.WriteLine(
-                $"Berhasil: {forecastCount} record, " +
-                $"{errorCount} masalah, " +
-                $"{qualityWarningCount} warning kualitas.");
-        }
-
-        if (seriesQualityFlags.Count > 0)
-        {
-            Console.WriteLine(
-                "Warning seri: " +
-                string.Join(
-                    ", ",
-                    seriesQualityFlags));
-        }
+        return $"ndbc-{startedAt:yyyyMMdd-HHmmss}-{Guid.NewGuid():N}"[..31];
     }
-
-    private static void PrintSummary(
-        ScrapeBatchData batchData,
-        string metadataPath,
-        string selectedPortsPath,
-        string portResultsPath,
-        string qualitySummaryPath,
-        string anomaliesPath)
-    {
-        Console.WriteLine();
-        Console.WriteLine(
-            "======================================");
-        Console.WriteLine(
-            "RINGKASAN SCRAPING");
-        Console.WriteLine(
-            "======================================");
-        Console.WriteLine(
-            $"Batch ID             : " +
-            $"{batchData.BatchId}");
-        Console.WriteLine(
-            $"Tipe run             : " +
-            $"{batchData.RunType}");
-        Console.WriteLine(
-            $"Mode pemilihan       : " +
-            $"{batchData.SelectionMode}");
-        Console.WriteLine(
-            $"Pelabuhan diminta    : " +
-            $"{batchData.RequestedPortCount}");
-        Console.WriteLine(
-            $"Pelabuhan berhasil   : " +
-            $"{batchData.SuccessfulPortCount}");
-        Console.WriteLine(
-            $"Berhasil parsial     : " +
-            $"{batchData.PartialSuccessPortCount}");
-        Console.WriteLine(
-            $"Sumber tidak tersedia: " +
-            $"{batchData.SourceUnavailablePortCount}");
-        Console.WriteLine(
-            $"Gagal teknis         : " +
-            $"{batchData.TechnicalFailedPortCount}");
-        Console.WriteLine(
-            $"Total forecast       : " +
-            $"{batchData.ForecastCount}");
-        Console.WriteLine(
-            $"Total diagnostik     : " +
-            $"{batchData.ErrorCount}");
-        Console.WriteLine(
-            $"Error teknis         : " +
-            $"{batchData.TechnicalErrorCount}");
-        Console.WriteLine(
-            $"Warning kualitas     : " +
-            $"{batchData.QualityWarningCount}");
-        Console.WriteLine(
-            $"Status               : " +
-            $"{batchData.Status}");
-        Console.WriteLine(
-            $"Metadata batch       : " +
-            $"{metadataPath}");
-        Console.WriteLine(
-            $"Daftar sampel        : " +
-            $"{selectedPortsPath}");
-        Console.WriteLine(
-            $"Hasil per pelabuhan  : " +
-            $"{portResultsPath}");
-        Console.WriteLine(
-            $"Ringkasan kualitas   : " +
-            $"{qualitySummaryPath}");
-        Console.WriteLine(
-            $"Laporan anomali      : " +
-            $"{anomaliesPath}");
-    }
-
-    private sealed record PreparedRun(
-        ScrapeBatchContext Batch,
-        IReadOnlyList<PortData> SelectedPorts,
-        List<ScrapeErrorData> Errors,
-        List<PortScrapeResultData> PortResults,
-        string RunType,
-        string? ParentBatchId,
-        string SelectionMode,
-        bool SourceRetryCompleted,
-        bool IsResume);
 }
