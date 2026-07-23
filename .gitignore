@@ -30,3 +30,16 @@ Thumbs.db
 # Environment files
 .env
 .env.*
+
+# Sementara
+/Data Scraping/data/
+
+# File gabungan dibuat secara lokal, tetapi terlalu besar untuk GitHub
+/Data Scraping/data/observations.json
+/Data Scraping/data/observations.json.tmp
+
+# Checkpoint hanya digunakan saat proses scraping berjalan
+/Data Scraping/data/checkpoints/
+
+# Output pengujian lokal
+/Data Scraping/data-test/
