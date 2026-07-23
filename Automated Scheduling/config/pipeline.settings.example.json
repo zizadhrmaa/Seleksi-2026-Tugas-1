@@ -1,0 +1,14 @@
+{
+  "repoRoot": "D:\\ZIZAKAYA\\Asisten Basis Data\\Seleksi-2026-Tugas-1",
+  "pgBin": "C:\\Program Files\\PostgreSQL\\13\\bin",
+  "postgresDataDirectory": "D:\\PostgreSQL\\ndbc-data",
+  "postgresLogPath": "D:\\PostgreSQL\\ndbc-server.log",
+  "hostName": "localhost",
+  "port": 5433,
+  "database": "ndbc",
+  "username": "postgres",
+  "targetStationCount": 90,
+  "requestDelaySeconds": 1.0,
+  "dailyAt": "02:00",
+  "keepBatchDirectories": 2
+}

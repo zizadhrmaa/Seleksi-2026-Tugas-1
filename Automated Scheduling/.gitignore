@@ -1,0 +1,7 @@
+# Konfigurasi lokal dan credential terenkripsi untuk user Windows saat ini
+config/pipeline.settings.local.json
+config/postgres.password.dpapi
+
+# Hasil runtime yang berukuran besar
+logs/
+runs/
