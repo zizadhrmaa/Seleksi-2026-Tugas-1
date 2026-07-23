@@ -1,8 +1,8 @@
-namespace BmkgScraper.Http;
+namespace NdbcScraper.Http;
 
 internal interface IHttpFetcher
 {
-    Task<HttpFetchResult> GetHtmlAsync(
+    Task<HttpFetchResult> GetStringAsync(
         Uri url,
         CancellationToken cancellationToken = default);
 }
