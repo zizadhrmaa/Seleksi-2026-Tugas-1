@@ -1,4 +1,4 @@
-# ETL Data Meteorologi Buoy NDBC
+# ETL dan Data Warehouse Data Meteorologi Buoy NDBC
 
 Proyek Seleksi Tahap 2 Asisten Laboratorium Basis Data 2026
 
@@ -22,18 +22,20 @@ Proyek Seleksi Tahap 2 Asisten Laboratorium Basis Data 2026
 10. [Data Modeling](#data-modeling)
 11. [Translasi ERD ke Diagram Relasional](#translasi-erd-ke-diagram-relasional)
 12. [Implementasi PostgreSQL dan Data Storing](#implementasi-postgresql-dan-data-storing)
-13. [Export dan Restore Database](#export-dan-restore-database)
-14. [Bonus Query Optimization](#bonus-query-optimization)
-15. [Bonus Automated Scheduling](#bonus-automated-scheduling)
-16. [Screenshot Bukti Implementasi](#screenshot-bukti-implementasi)
-17. [Penggunaan AI](#penggunaan-ai)
-18. [Catatan Keamanan dan Git](#catatan-keamanan-dan-git)
-19. [Troubleshooting](#troubleshooting)
-20. [Referensi](#referensi)
+13. [Data Warehouse Analitik](#data-warehouse-analitik)
+14. [Export dan Restore Data Warehouse](#export-dan-restore-data-warehouse)
+15. [Export dan Restore Database Operasional](#export-dan-restore-database-operasional)
+16. [Bonus Query Optimization](#bonus-query-optimization)
+17. [Bonus Automated Scheduling](#bonus-automated-scheduling)
+18. [Screenshot Bukti Implementasi](#screenshot-bukti-implementasi)
+19. [Penggunaan AI](#penggunaan-ai)
+20. [Catatan Keamanan dan Git](#catatan-keamanan-dan-git)
+21. [Troubleshooting](#troubleshooting)
+22. [Referensi](#referensi)
 
 ## Ringkasan Proyek
 
-Proyek ini mengimplementasikan alur ETL untuk data meteorologi dari stasiun buoy milik National Data Buoy Center atau NDBC. Data diperoleh melalui web scraping tanpa menggunakan API, dibersihkan dan ditransformasikan menjadi JSON terstruktur, kemudian dimuat ke dalam PostgreSQL.
+Proyek ini mengimplementasikan pipeline ETL end-to-end untuk data meteorologi dari stasiun buoy milik National Data Buoy Center atau NDBC. Data diperoleh melalui web scraping tanpa menggunakan API, dibersihkan dan ditransformasikan menjadi JSON terstruktur, dimuat ke database operasional PostgreSQL pada schema `ndbc`, kemudian diproses kembali ke data warehouse analitik pada schema `ndbc_dw`.
 
 Data utama yang dikumpulkan terdiri dari:
 
@@ -49,6 +51,8 @@ Data utama yang dikumpulkan terdiri dari:
 Database dirancang untuk mendukung penyimpanan data time-series dalam jumlah besar, pembaruan berkala, pelacakan asal data, pencegahan redundansi, dan query analitik yang efisien.
 
 RDBMS yang digunakan adalah **PostgreSQL 13** dengan schema bernama `ndbc`. PostgreSQL dipilih karena mendukung constraint relasional yang lengkap, composite primary key, transaction, trigger, indexing, `COPY`, `ON CONFLICT`, dan fasilitas analisis query melalui `EXPLAIN ANALYZE`.
+
+Database operasional menjaga integritas data time-series, keterlacakan sumber, idempotensi, dan pencegahan redundansi. Data warehouse menggunakan model **fact constellation** untuk mendukung analisis berdasarkan stasiun, tanggal, waktu, dan batch scraping.
 
 ## Alasan Pemilihan Topik
 
@@ -119,6 +123,23 @@ Nilai `MM` pada sumber NDBC diperlakukan sebagai data yang tidak tersedia dan di
 
 Export database pada folder `Data Storing/export/database_export` merupakan **baseline snapshot** setelah batch utama, yaitu 90 stasiun dan 571.167 observasi. Export tersebut telah diuji dengan restore ke database baru dan menghasilkan jumlah data yang sama. Automated scheduling dijalankan setelah snapshot dibuat, sehingga jumlah pada database operasional dapat lebih besar daripada jumlah pada export baseline. Perbedaan tersebut disengaja dan didokumentasikan, bukan kehilangan atau inkonsistensi data.
 
+
+### Hasil data warehouse terbaru
+
+| Objek `ndbc_dw` | Jumlah baris |
+|---|---:|
+| `dim_date` | 82 |
+| `dim_time` | 201 |
+| `dim_station` | 90 |
+| `dim_scrape_run` | 3 |
+| `fact_scrape_run` | 3 |
+| `fact_observation` | 573.475 |
+| `etl_batch` | 3 |
+
+Seluruh pemeriksaan data warehouse berstatus `PASS`. Verifikasi mencakup kesamaan jumlah source dan fact, source row yang hilang, unexpected warehouse row, duplicate grain, orphan dimension, date-time key mismatch, dan transformation mismatch.
+
+Pengujian idempotensi berhasil: eksekusi kedua tidak memasukkan ulang station, scrape run, maupun observation yang sama. Export data warehouse juga berhasil direstore ke database `ndbc_dw_restore_test` dengan jumlah yang sama seperti manifest dan seluruh pemeriksaan integritas restore berstatus `PASS`.
+
 ## Arsitektur ETL
 
 ```text
@@ -142,8 +163,17 @@ Validasi data sumber oleh loader
         v
 PostgreSQL schema ndbc
         |
-        v
-Verification, export, query optimization, automated scheduling
+        +------------------------------+
+        |                              |
+        v                              v
+Verification operasional       Incremental load ke schema ndbc_dw
+Export dan restore                    |
+Query optimization                    v
+Automated scheduling           Dimension dan fact tables
+                                       |
+                                       v
+                                Fail-fast verification, analytics,
+                                export, dan restore test
 ```
 
 ## Struktur Repository
@@ -196,6 +226,34 @@ Seleksi-2026-Tugas-1/
 │       ├── Utilities/
 │       ├── NdbcDataLoader.csproj
 │       └── Program.cs
+├── Data Warehouse/
+│   ├── design/
+│   │   ├── erd.png
+│   │   ├── erd.dot
+│   │   ├── relational_diagram.png
+│   │   ├── relational_diagram.dot
+│   │   └── data_warehouse_design.md
+│   ├── src/
+│   │   ├── 01_create_warehouse.sql
+│   │   ├── 02_load_warehouse.sql
+│   │   ├── 03_verify_and_analyze.sql
+│   │   ├── 04_test_idempotency.sql
+│   │   └── run_warehouse.ps1
+│   ├── export/
+│   │   ├── database_export/
+│   │   ├── export_warehouse.ps1
+│   │   ├── restore_warehouse.ps1
+│   │   └── verify_restored_warehouse.sql
+│   ├── screenshots/
+│   │   ├── 01_tables_and_counts.png
+│   │   ├── 02_select_from_where.png
+│   │   ├── 03_daily_analytics.png
+│   │   ├── 04_scrape_run_analytics.png
+│   │   ├── 05_data_quality.png
+│   │   └── 06_export_restore.png
+│   ├── PRE_SUBMISSION_CHECKLIST.md
+│   ├── README.md
+│   └── validate_submission.ps1
 ├── Query Optimasi/
 │   ├── screenshots/
 │   └── query_optimization.sql
@@ -955,7 +1013,126 @@ ORDER BY o.observed_at_utc DESC
 LIMIT 20;
 ```
 
-## Export dan Restore Database
+## Data Warehouse Analitik
+
+### Model dimensional
+
+Data warehouse berada pada schema `ndbc_dw` dan menggunakan model **fact constellation**.
+
+- `fact_observation` memiliki grain satu observasi untuk satu stasiun dan satu `observed_at_utc`.
+- `fact_scrape_run` memiliki grain satu pelaksanaan scraping.
+- Dimension bersama terdiri dari `dim_station`, `dim_date`, `dim_time`, dan `dim_scrape_run`.
+- `etl_batch` digunakan sebagai tabel audit proses loading, bukan sebagai dimension fact.
+
+Dimension menggunakan surrogate key. `dim_station` menerapkan SCD Type 1 sehingga metadata terbaru menggantikan metadata sebelumnya.
+
+### Menjalankan data warehouse
+
+```powershell
+cd ".\Data Warehouse\src"
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+Unblock-File ".\run_warehouse.ps1"
+
+.\run_warehouse.ps1 `
+  -PgBin "C:\Program Files\PostgreSQL\13\bin" `
+  -HostName localhost `
+  -Port 5433 `
+  -Database ndbc `
+  -Username postgres `
+  -TestIdempotency
+```
+
+Urutan script:
+
+1. `01_create_warehouse.sql`
+2. `02_load_warehouse.sql`
+3. `03_verify_and_analyze.sql`
+4. `04_test_idempotency.sql`
+
+Verifikasi menggunakan assertion fail-fast. Proses dihentikan dengan `RAISE EXCEPTION` apabila ditemukan perbedaan jumlah, data yang hilang, duplicate grain, missing dimension, atau transformation mismatch.
+
+Target idempotensi pada eksekusi kedua:
+
+```text
+inserted_station_count     = 0
+inserted_scrape_run_count  = 0
+inserted_observation_count = 0
+```
+
+Dokumentasi desain lengkap tersedia pada `Data Warehouse/design/data_warehouse_design.md`.
+
+## Export dan Restore Data Warehouse
+
+### Membuat export
+
+```powershell
+cd ".\Data Warehouse\export"
+
+.\export_warehouse.ps1 `
+  -PgBin "C:\Program Files\PostgreSQL\13\bin" `
+  -HostName localhost `
+  -Port 5433 `
+  -Database ndbc `
+  -Username postgres `
+  -OutputDirectory ".\database_export" `
+  -MaximumChunkMegabyte 45
+```
+
+### Restore ke database pengujian
+
+```powershell
+.\restore_warehouse.ps1 `
+  -PgBin "C:\Program Files\PostgreSQL\13\bin" `
+  -HostName localhost `
+  -Port 5433 `
+  -Database ndbc_dw_restore_test `
+  -Username postgres `
+  -InputDirectory ".\database_export" `
+  -RecreateDatabase
+```
+
+### Verifikasi restore
+
+```powershell
+& "C:\Program Files\PostgreSQL\13\bin\psql.exe" `
+  -X `
+  -v ON_ERROR_STOP=1 `
+  -U postgres `
+  -h localhost `
+  -p 5433 `
+  -d ndbc_dw_restore_test `
+  -f ".\verify_restored_warehouse.sql" 2>&1 |
+  Tee-Object ".\database_export\restore_verification.txt"
+```
+
+Hasil verifikasi terakhir:
+
+| Pemeriksaan | Actual | Expected | Status |
+|---|---:|---:|---|
+| Duplicate observation grain | 0 | 0 | PASS |
+| Duplicate scrape run grain | 0 | 0 | PASS |
+| Observation date-time key mismatch | 0 | 0 | PASS |
+| Orphan observation dimension | 0 | 0 | PASS |
+| Orphan scrape run dimension | 0 | 0 | PASS |
+
+Jumlah hasil restore: 82 date rows, 201 time rows, 90 station rows, 3 scrape run dimension rows, 3 scrape run fact rows, 573.475 observation fact rows, dan 3 ETL batch rows.
+
+### Validasi submission
+
+```powershell
+cd ".\Data Warehouse"
+.\validate_submission.ps1
+```
+
+Target akhir:
+
+```text
+SUBMISSION READY
+```
+
+## Export dan Restore Database Operasional
+
+Bagian ini menjelaskan export schema operasional `ndbc` pada folder `Data Storing`. Export schema `ndbc_dw` dijelaskan pada bagian sebelumnya.
 
 Export dibuat dengan `pg_dump` dan dipecah agar setiap file berada di bawah batas ukuran GitHub.
 
@@ -1325,6 +1502,32 @@ Folder `runs` dan `logs` merupakan data runtime besar dan diabaikan oleh Git.
   <img src="Data%20Storing/design/relational_diagram.png" alt="Diagram relasional NDBC" width="900" />
 </p>
 
+### Model data warehouse
+
+<p align="center">
+  <img src="Data%20Warehouse/design/erd.png" alt="ERD data warehouse NDBC" width="900" />
+</p>
+
+<p align="center">
+  <img src="Data%20Warehouse/design/relational_diagram.png" alt="Diagram relasional data warehouse NDBC" width="900" />
+</p>
+
+### Bukti data warehouse
+
+![Daftar tabel dan jumlah data warehouse](Data%20Warehouse/screenshots/01_tables_and_counts.png)
+
+![Query SELECT FROM WHERE data warehouse](Data%20Warehouse/screenshots/02_select_from_where.png)
+
+![Analisis meteorologi harian](Data%20Warehouse/screenshots/03_daily_analytics.png)
+
+![Analisis kualitas batch scraping](Data%20Warehouse/screenshots/04_scrape_run_analytics.png)
+
+![Verifikasi kualitas data warehouse](Data%20Warehouse/screenshots/05_data_quality.png)
+
+![Export dan restore data warehouse](Data%20Warehouse/screenshots/06_export_restore.png)
+
+### Bukti database operasional
+
 ### Bukti tabel PostgreSQL
 
 ![Daftar tabel PostgreSQL](Data%20Storing/screenshots/01_tables.png)
@@ -1398,7 +1601,10 @@ AI membantu pada bagian berikut:
 7. Membantu debugging loader PostgreSQL, binary `COPY`, transaction, dan proses export/restore.
 8. Membantu menyusun dan meninjau tiga skenario query optimization.
 9. Membantu menyusun dan meninjau script automated scheduling serta verifikasi anti-redundansi.
-10. Membantu menyusun dokumentasi README agar seluruh langkah penggunaan dan hasil pengujian tercatat secara terstruktur.
+10. Membantu meninjau model dimensional, grain, surrogate key, fact constellation, dan SCD Type 1.
+11. Membantu menyusun assertion fail-fast, pengujian idempotensi, dan pemeriksaan set difference.
+12. Membantu meninjau export, restore, manifest, serta submission validator data warehouse.
+13. Membantu menyusun dokumentasi README agar seluruh langkah penggunaan dan hasil pengujian tercatat secara terstruktur.
 
 ### Bagian yang dikerjakan dan diverifikasi sendiri
 
@@ -1417,7 +1623,12 @@ Author melakukan sendiri bagian berikut:
 11. Menjalankan pipeline kedua dan memeriksa bahwa jumlah duplikasi tetap nol.
 12. Mendaftarkan serta menguji Windows Scheduled Task.
 13. Mengambil dan menyimpan screenshot bukti implementasi.
-14. Meninjau kembali hasil akhir sebelum di-commit dan dikumpulkan.
+14. Menjalankan loading data warehouse dan memastikan seluruh assertion berstatus `PASS`.
+15. Menguji idempotensi data warehouse.
+16. Membuat export data warehouse dan melakukan restore ke database terpisah.
+17. Memastikan jumlah hasil restore sama dengan manifest.
+18. Menjalankan `validate_submission.ps1`.
+19. Meninjau kembali hasil akhir sebelum di-commit dan dikumpulkan.
 
 ### Cara validasi hasil AI
 
@@ -1539,6 +1750,25 @@ errors.json
 scraping_report.json
 ```
 
+### Pesan `NOTICE` dari `psql` dianggap error oleh PowerShell
+
+PostgreSQL dapat menulis `NOTICE` atau `WARNING` ke stderr meskipun exit code proses tetap `0`, misalnya:
+
+```text
+NOTICE: schema "pg_temp" does not exist, skipping
+```
+
+Pesan tersebut bukan kegagalan restore. Keberhasilan ditentukan melalui `$LASTEXITCODE` dan hasil assertion SQL.
+
+### Validator data warehouse belum menunjukkan `SUBMISSION READY`
+
+```powershell
+cd ".\Data Warehouse"
+.\validate_submission.ps1
+```
+
+Pastikan export SQL aktual, `export_manifest.txt`, `restore_verification.txt`, dan enam screenshot tersedia dengan nama yang tepat.
+
 ### Query optimization dijalankan ulang
 
 File `query_optimization.sql` menghapus index bonus terlebih dahulu agar baseline dapat direproduksi. Jangan menjalankan query lain yang bergantung pada index bonus pada saat script pengujian sedang berjalan.
@@ -1603,4 +1833,4 @@ Get-ScheduledTaskInfo -TaskName "NDBC Automated ETL" |
 
 ---
 
-Proyek ini dibuat oleh **Aziza Dharma Putri (13524017)** untuk Seleksi Tahap 2 Asisten Laboratorium Basis Data 2026.
+Proyek ETL dan data warehouse ini dibuat oleh **Aziza Dharma Putri (13524017)** untuk Seleksi Tahap 2 Asisten Laboratorium Basis Data 2026.
