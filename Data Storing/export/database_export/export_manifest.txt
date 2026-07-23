@@ -1,0 +1,10 @@
+NDBC PostgreSQL Export
+Generated at: 2026-07-23T16:08:28.4176841+07:00
+Database: ndbc
+Host: localhost:5433
+Restore files in this exact order:
+00_database_pre.sql | 0.01 MB
+10_observation_001.sql | 45 MB
+10_observation_002.sql | 45 MB
+10_observation_003.sql | 20.67 MB
+99_database_post.sql | 0.04 MB
