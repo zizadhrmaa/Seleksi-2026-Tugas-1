@@ -1,0 +1,1642 @@
+[
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "1801583",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=1801583",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/1801583.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:14:25.246779+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "1801589",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=1801589",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/1801589.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:14:27.2465158+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "1801593",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=1801593",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/1801593.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:14:29.2732623+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "21413",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=21413",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/21413.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:14:30.8368376+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "21414",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=21414",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/21414.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:14:32.8807364+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "21415",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=21415",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/21415.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:14:34.9351077+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "21416",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=21416",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/21416.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:14:37.3866919+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "21417",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=21417",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/21417.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:14:39.0298766+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "21418",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=21418",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/21418.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:14:41.0717575+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "21419",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=21419",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/21419.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:14:43.2483321+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "21420",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=21420",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/21420.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:14:45.9875439+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "32301",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=32301",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/32301.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:14:47.6266175+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "32302",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=32302",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/32302.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:14:50.4936943+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "32411",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=32411",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/32411.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:14:52.9546459+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "32412",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=32412",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/32412.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:14:54.5897282+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "32413",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=32413",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/32413.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:14:57.2491978+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41003",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41003",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41003.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:15:04.316718+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41005",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41005",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41005.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:15:08.2174393+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41006",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41006",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41006.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:15:11.2799411+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41007",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41007",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41007.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:15:13.4339508+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41011",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41011",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41011.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:15:24.2629217+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41012",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41012",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41012.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:15:26.5419027+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41015",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41015",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41015.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:15:31.0428094+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41016",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41016",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41016.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:15:33.3979193+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41017",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41017",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41017.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:15:35.3437078+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41018",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41018",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41018.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:15:37.5617294+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41021",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41021",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41021.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:15:39.6564411+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41022",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41022",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41022.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:15:42.9212972+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41023",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41023",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41023.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:15:44.3701899+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41035",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41035",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41035.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:15:49.4752692+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41036",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41036",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41036.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:15:53.3677178+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41420",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41420",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41420.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:16:14.1002057+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41421",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41421",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41421.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:16:16.4108825+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41424",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41424",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41424.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:16:18.658989+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41425",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41425",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41425.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:16:20.7082773+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41A46",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41a46",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41A46.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:16:22.5516333+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41B41",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41b41",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41B41.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:16:25.1103428+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41S43",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41s43",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41S43.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:16:28.3935828+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "41S46",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=41s46",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/41S46.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:16:30.8453476+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42003",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42003",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42003.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:16:38.7293652+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42004",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42004",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42004.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:16:41.0862925+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42005",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42005",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42005.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:16:43.3575614+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42006",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42006",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42006.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:16:45.7997693+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42007",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42007",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42007.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:16:48.3666329+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42008",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42008",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42008.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:16:50.7257876+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42009",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42009",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42009.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:16:53.27174+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42010",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42010",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42010.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:16:55.9471713+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42011",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42011",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42011.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:16:57.4754711+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42015",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42015",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42015.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:17:01.361941+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42016",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42016",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42016.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:17:04.5385024+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42017",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42017",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42017.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:17:07.8134792+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42018",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42018",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42018.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:17:10.6803158+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42019",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42019",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42019.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:17:12.7382795+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42020",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42020",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42020.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:17:15.1870512+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42025",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42025",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42025.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:17:18.4659591+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42037",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42037",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42037.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:17:24.6058402+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42038",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42038",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42038.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:17:27.5757479+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42041",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42041",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42041.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:17:35.0522976+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42042",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42042",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42042.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:17:37.119956+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42053",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42053",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42053.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:17:39.6608302+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42054",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42054",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42054.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:17:41.8173819+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42065",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42065",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42065.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:00.1393425+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42080",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42080",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42080.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:01.603405+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42407",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42407",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42407.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:04.1321027+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42408",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42408",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42408.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:05.6694168+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42409",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42409",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42409.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:07.6166506+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42429",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42429",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42429.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:18:08.6938241+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42501",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42501",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42501.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:10.6839057+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42503",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42503",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42503.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:13.1978063+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "42534",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=42534",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/42534.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:15.6678656+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "43412",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=43412",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/43412.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:17.7437585+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "43413",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=43413",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/43413.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:19.6986971+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44001",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44001",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44001.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:22.3597679+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44003",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44003",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44003.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:25.8424089+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44004",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44004",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44004.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:28.6117303+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44005",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44005",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44005.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:31.4746635+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44006",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44006",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44006.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:33.4240266+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44010",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44010",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44010.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:42.6449202+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44012",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44012",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44012.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:47.2126797+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44015",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44015",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44015.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:53.7979376+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44017",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44017",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44017.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:56.9743454+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44018",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44018",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44018.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:18:59.0222848+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44019",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44019",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44019.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:19:00.5083581+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44023",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44023",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44023.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:19:05.2670033+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44026",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44026",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44026.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:19:09.3676438+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44028",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44028",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44028.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:19:14.2509231+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44066",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44066",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44066.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:19:18.7884461+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44070",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44070",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44070.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:19:21.6511107+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44071",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44071",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44071.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:19:24.3942216+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44401",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44401",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44401.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:19:26.8791534+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44402",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44402",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44402.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:19:28.9210301+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44403",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44403",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44403.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:19:30.4048239+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "44585",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=44585",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/44585.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:19:33.1198263+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "45003",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=45003",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/45003.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:19:38.6509678+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "45007",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=45007",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/45007.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:19:47.763607+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "45008",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=45008",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/45008.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:19:50.2233018+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "45009",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=45009",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/45009.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:19:52.1735392+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "45010",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=45010",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/45010.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:19:54.8421284+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "45011",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=45011",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/45011.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:19:57.5946347+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46003",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46003",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46003.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:20:05.6885282+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46007",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46007",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46007.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:20:13.1598554+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46008",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46008",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46008.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:20:16.1287765+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46009",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46009",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46009.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:20:18.2790921+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46010",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46010",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46010.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:20:20.8403435+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46012",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46012",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46012.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:20:24.1247881+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46016",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46016",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46016.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:20:32.7363693+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46017",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46017",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46017.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:20:34.2294711+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46018",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46018",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46018.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:20:35.3903967+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46019",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46019",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46019.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:20:36.9222612+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46020",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46020",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46020.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:20:37.9509156+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46021",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46021",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46021.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:20:39.296951+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46023",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46023",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46023.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:20:43.8787613+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46024",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46024",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46024.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:20:45.5135303+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46030",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46030",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46030.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:20:59.2680364+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46031",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46031",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46031.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:21:01.9901376+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46032",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46032",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46032.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:21:03.8171918+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46033",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46033",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46033.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:21:05.0854444+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46034",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46034",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46034.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:21:06.108427+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46037",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46037",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46037.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:21:10.2904056+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46038",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46038",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46038.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:21:11.432135+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46039",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46039",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46039.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:21:11.9578875+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46040",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46040",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46040.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:21:14.803628+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46043",
+    "reason_code": "NOT_BUOY",
+    "message": "Stasiun tidak teridentifikasi sebagai buoy.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46043",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46043.txt",
+    "http_status_code": null,
+    "skipped_at": "2026-07-23T06:21:21.7879558+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46045",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46045",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46045.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:21:23.7135084+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46048",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46048",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46048.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:21:27.7086664+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46051",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46051",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46051.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:21:31.494184+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46062",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46062",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46062.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:21:45.5252076+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46063",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46063",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46063.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:21:47.5804973+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46079",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46079",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46079.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:22:13.6873735+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46090",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46090",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46090.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:22:39.0818625+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46105",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46105",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46105.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:22:42.1658098+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46106",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46106",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46106.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:22:44.0993534+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46107",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46107",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46107.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:22:46.2617036+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46115",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46115",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46115.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:22:49.06166+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46270",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46270",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46270.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:22:51.4935563+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46290",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46290",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46290.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:22:53.8735265+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46401",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46401",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46401.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:22:55.9164019+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46402",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46402",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46402.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:22:57.9218723+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46403",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46403",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46403.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:22:59.9735458+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46404",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46404",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46404.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:02.0206468+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46405",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46405",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46405.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:04.5815604+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46406",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46406",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46406.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:06.5594711+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46407",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46407",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46407.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:08.5736469+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46408",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46408",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46408.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:10.1313593+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46409",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46409",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46409.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:12.0565757+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46410",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46410",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46410.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:14.1429693+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46411",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46411",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46411.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:16.5631394+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46412",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46412",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46412.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:18.6109951+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46413",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46413",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46413.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:20.1447033+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46414",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46414",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46414.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:23.6262588+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46415",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46415",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46415.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:25.6950835+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46416",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46416",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46416.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:28.0340822+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46419",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46419",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46419.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:29.9769611+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46490",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46490",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46490.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:32.0291255+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46551",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46551",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46551.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:34.7223175+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46553",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46553",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46553.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:36.1965061+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46779",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46779",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46779.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:38.7822893+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46780",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46780",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46780.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:40.8316626+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46781",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46781",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46781.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:42.4823399+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46782",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46782",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46782.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:45.8479193+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46785",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46785",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46785.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:47.9984755+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46B35",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46b35",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46B35.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:49.7383771+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "46D04",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=46d04",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/46D04.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:52.3017695+00:00"
+  },
+  {
+    "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+    "station_id": "48011",
+    "reason_code": "NO_REALTIME_METEOROLOGICAL_DATA",
+    "message": "File standard meteorological real-time tidak tersedia.",
+    "detail_url": "https://www.ndbc.noaa.gov/station_page.php?station=48011",
+    "realtime_data_url": "https://www.ndbc.noaa.gov/data/realtime2/48011.txt",
+    "http_status_code": 404,
+    "skipped_at": "2026-07-23T06:23:53.7881723+00:00"
+  }
+]

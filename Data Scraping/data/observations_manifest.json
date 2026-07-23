@@ -1,0 +1,730 @@
+{
+  "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+  "generated_at": "2026-07-23T06:24:10.3084876+00:00",
+  "total_station_count": 90,
+  "total_observation_count": 571167,
+  "combined_file": "observations.json",
+  "combined_file_git_ignored": true,
+  "station_files": [
+    {
+      "station_id": "41001",
+      "relative_path": "observations/41001.json",
+      "observation_count": 6448,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 4177399
+    },
+    {
+      "station_id": "41002",
+      "relative_path": "observations/41002.json",
+      "observation_count": 6453,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 4180980
+    },
+    {
+      "station_id": "41004",
+      "relative_path": "observations/41004.json",
+      "observation_count": 6466,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 4190641
+    },
+    {
+      "station_id": "41008",
+      "relative_path": "observations/41008.json",
+      "observation_count": 6441,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4180349
+    },
+    {
+      "station_id": "41009",
+      "relative_path": "observations/41009.json",
+      "observation_count": 6467,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 4190987
+    },
+    {
+      "station_id": "41010",
+      "relative_path": "observations/41010.json",
+      "observation_count": 6456,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 4182001
+    },
+    {
+      "station_id": "41013",
+      "relative_path": "observations/41013.json",
+      "observation_count": 6463,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4189163
+    },
+    {
+      "station_id": "41025",
+      "relative_path": "observations/41025.json",
+      "observation_count": 5986,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 3883917
+    },
+    {
+      "station_id": "41040",
+      "relative_path": "observations/41040.json",
+      "observation_count": 6452,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 4174277
+    },
+    {
+      "station_id": "41041",
+      "relative_path": "observations/41041.json",
+      "observation_count": 6447,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 4168528
+    },
+    {
+      "station_id": "41043",
+      "relative_path": "observations/41043.json",
+      "observation_count": 6459,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 4181105
+    },
+    {
+      "station_id": "41044",
+      "relative_path": "observations/41044.json",
+      "observation_count": 6464,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4184010
+    },
+    {
+      "station_id": "41046",
+      "relative_path": "observations/41046.json",
+      "observation_count": 6457,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 4181008
+    },
+    {
+      "station_id": "41047",
+      "relative_path": "observations/41047.json",
+      "observation_count": 6453,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 4178509
+    },
+    {
+      "station_id": "41048",
+      "relative_path": "observations/41048.json",
+      "observation_count": 6458,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 4183015
+    },
+    {
+      "station_id": "41049",
+      "relative_path": "observations/41049.json",
+      "observation_count": 6476,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 4193328
+    },
+    {
+      "station_id": "42001",
+      "relative_path": "observations/42001.json",
+      "observation_count": 6451,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4179941
+    },
+    {
+      "station_id": "42002",
+      "relative_path": "observations/42002.json",
+      "observation_count": 6456,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 4178138
+    },
+    {
+      "station_id": "42012",
+      "relative_path": "observations/42012.json",
+      "observation_count": 6787,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4402446
+    },
+    {
+      "station_id": "42035",
+      "relative_path": "observations/42035.json",
+      "observation_count": 6465,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 4182835
+    },
+    {
+      "station_id": "42036",
+      "relative_path": "observations/42036.json",
+      "observation_count": 6453,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4181712
+    },
+    {
+      "station_id": "42039",
+      "relative_path": "observations/42039.json",
+      "observation_count": 6458,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 4185846
+    },
+    {
+      "station_id": "42040",
+      "relative_path": "observations/42040.json",
+      "observation_count": 6474,
+      "first_observed_at_utc": "2026-05-03T00:00:00+00:00",
+      "last_observed_at_utc": "2026-06-17T14:50:00+00:00",
+      "file_size_bytes": 4199186
+    },
+    {
+      "station_id": "42055",
+      "relative_path": "observations/42055.json",
+      "observation_count": 6452,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4180114
+    },
+    {
+      "station_id": "42056",
+      "relative_path": "observations/42056.json",
+      "observation_count": 6456,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4179734
+    },
+    {
+      "station_id": "42057",
+      "relative_path": "observations/42057.json",
+      "observation_count": 6453,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4177540
+    },
+    {
+      "station_id": "42058",
+      "relative_path": "observations/42058.json",
+      "observation_count": 6453,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4182935
+    },
+    {
+      "station_id": "42059",
+      "relative_path": "observations/42059.json",
+      "observation_count": 6456,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4181469
+    },
+    {
+      "station_id": "42060",
+      "relative_path": "observations/42060.json",
+      "observation_count": 6458,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4180734
+    },
+    {
+      "station_id": "44007",
+      "relative_path": "observations/44007.json",
+      "observation_count": 6432,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4167579
+    },
+    {
+      "station_id": "44008",
+      "relative_path": "observations/44008.json",
+      "observation_count": 6457,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4183361
+    },
+    {
+      "station_id": "44009",
+      "relative_path": "observations/44009.json",
+      "observation_count": 6474,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T06:00:00+00:00",
+      "file_size_bytes": 4211812
+    },
+    {
+      "station_id": "44011",
+      "relative_path": "observations/44011.json",
+      "observation_count": 6458,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4185011
+    },
+    {
+      "station_id": "44013",
+      "relative_path": "observations/44013.json",
+      "observation_count": 6466,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4189657
+    },
+    {
+      "station_id": "44014",
+      "relative_path": "observations/44014.json",
+      "observation_count": 6402,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4191428
+    },
+    {
+      "station_id": "44020",
+      "relative_path": "observations/44020.json",
+      "observation_count": 6468,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4196490
+    },
+    {
+      "station_id": "44025",
+      "relative_path": "observations/44025.json",
+      "observation_count": 2302,
+      "first_observed_at_utc": "2026-06-08T00:10:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 1501386
+    },
+    {
+      "station_id": "44027",
+      "relative_path": "observations/44027.json",
+      "observation_count": 6478,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4196887
+    },
+    {
+      "station_id": "44065",
+      "relative_path": "observations/44065.json",
+      "observation_count": 6461,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4180899
+    },
+    {
+      "station_id": "45001",
+      "relative_path": "observations/45001.json",
+      "observation_count": 4365,
+      "first_observed_at_utc": "2026-06-22T20:50:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 2823594
+    },
+    {
+      "station_id": "45002",
+      "relative_path": "observations/45002.json",
+      "observation_count": 6122,
+      "first_observed_at_utc": "2026-06-10T14:50:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 3968934
+    },
+    {
+      "station_id": "45004",
+      "relative_path": "observations/45004.json",
+      "observation_count": 4315,
+      "first_observed_at_utc": "2026-06-23T03:50:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 2799973
+    },
+    {
+      "station_id": "45005",
+      "relative_path": "observations/45005.json",
+      "observation_count": 6506,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4227190
+    },
+    {
+      "station_id": "45006",
+      "relative_path": "observations/45006.json",
+      "observation_count": 4404,
+      "first_observed_at_utc": "2026-06-22T14:10:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 2851976
+    },
+    {
+      "station_id": "45012",
+      "relative_path": "observations/45012.json",
+      "observation_count": 6496,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4213703
+    },
+    {
+      "station_id": "46001",
+      "relative_path": "observations/46001.json",
+      "observation_count": 6468,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4190408
+    },
+    {
+      "station_id": "46002",
+      "relative_path": "observations/46002.json",
+      "observation_count": 6456,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4178259
+    },
+    {
+      "station_id": "46005",
+      "relative_path": "observations/46005.json",
+      "observation_count": 6473,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4196971
+    },
+    {
+      "station_id": "46006",
+      "relative_path": "observations/46006.json",
+      "observation_count": 6472,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4211218
+    },
+    {
+      "station_id": "46011",
+      "relative_path": "observations/46011.json",
+      "observation_count": 6502,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4204078
+    },
+    {
+      "station_id": "46013",
+      "relative_path": "observations/46013.json",
+      "observation_count": 6500,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4217528
+    },
+    {
+      "station_id": "46014",
+      "relative_path": "observations/46014.json",
+      "observation_count": 6488,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4208244
+    },
+    {
+      "station_id": "46015",
+      "relative_path": "observations/46015.json",
+      "observation_count": 6503,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4214875
+    },
+    {
+      "station_id": "46022",
+      "relative_path": "observations/46022.json",
+      "observation_count": 6508,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4212831
+    },
+    {
+      "station_id": "46025",
+      "relative_path": "observations/46025.json",
+      "observation_count": 6508,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4217970
+    },
+    {
+      "station_id": "46026",
+      "relative_path": "observations/46026.json",
+      "observation_count": 6506,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4219205
+    },
+    {
+      "station_id": "46027",
+      "relative_path": "observations/46027.json",
+      "observation_count": 6500,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4215889
+    },
+    {
+      "station_id": "46028",
+      "relative_path": "observations/46028.json",
+      "observation_count": 6511,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4223531
+    },
+    {
+      "station_id": "46029",
+      "relative_path": "observations/46029.json",
+      "observation_count": 6507,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T06:00:00+00:00",
+      "file_size_bytes": 4217537
+    },
+    {
+      "station_id": "46035",
+      "relative_path": "observations/46035.json",
+      "observation_count": 6466,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4183804
+    },
+    {
+      "station_id": "46041",
+      "relative_path": "observations/46041.json",
+      "observation_count": 6495,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4211569
+    },
+    {
+      "station_id": "46042",
+      "relative_path": "observations/46042.json",
+      "observation_count": 6505,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4220359
+    },
+    {
+      "station_id": "46047",
+      "relative_path": "observations/46047.json",
+      "observation_count": 6453,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4185624
+    },
+    {
+      "station_id": "46050",
+      "relative_path": "observations/46050.json",
+      "observation_count": 6492,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4209222
+    },
+    {
+      "station_id": "46053",
+      "relative_path": "observations/46053.json",
+      "observation_count": 6502,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4214244
+    },
+    {
+      "station_id": "46054",
+      "relative_path": "observations/46054.json",
+      "observation_count": 6499,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T06:00:00+00:00",
+      "file_size_bytes": 4208741
+    },
+    {
+      "station_id": "46059",
+      "relative_path": "observations/46059.json",
+      "observation_count": 6452,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4173235
+    },
+    {
+      "station_id": "46060",
+      "relative_path": "observations/46060.json",
+      "observation_count": 6457,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4184965
+    },
+    {
+      "station_id": "46061",
+      "relative_path": "observations/46061.json",
+      "observation_count": 6443,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4209615
+    },
+    {
+      "station_id": "46066",
+      "relative_path": "observations/46066.json",
+      "observation_count": 6478,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:40:00+00:00",
+      "file_size_bytes": 4193894
+    },
+    {
+      "station_id": "46069",
+      "relative_path": "observations/46069.json",
+      "observation_count": 6510,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T06:00:00+00:00",
+      "file_size_bytes": 4223558
+    },
+    {
+      "station_id": "46070",
+      "relative_path": "observations/46070.json",
+      "observation_count": 6367,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4130426
+    },
+    {
+      "station_id": "46071",
+      "relative_path": "observations/46071.json",
+      "observation_count": 6447,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4174489
+    },
+    {
+      "station_id": "46072",
+      "relative_path": "observations/46072.json",
+      "observation_count": 6447,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4172683
+    },
+    {
+      "station_id": "46073",
+      "relative_path": "observations/46073.json",
+      "observation_count": 6471,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4187860
+    },
+    {
+      "station_id": "46075",
+      "relative_path": "observations/46075.json",
+      "observation_count": 6463,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4185088
+    },
+    {
+      "station_id": "46076",
+      "relative_path": "observations/46076.json",
+      "observation_count": 6477,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4193289
+    },
+    {
+      "station_id": "46077",
+      "relative_path": "observations/46077.json",
+      "observation_count": 6462,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4182704
+    },
+    {
+      "station_id": "46078",
+      "relative_path": "observations/46078.json",
+      "observation_count": 6464,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4186265
+    },
+    {
+      "station_id": "46080",
+      "relative_path": "observations/46080.json",
+      "observation_count": 6456,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4179693
+    },
+    {
+      "station_id": "46081",
+      "relative_path": "observations/46081.json",
+      "observation_count": 6463,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4189991
+    },
+    {
+      "station_id": "46082",
+      "relative_path": "observations/46082.json",
+      "observation_count": 6462,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4185879
+    },
+    {
+      "station_id": "46083",
+      "relative_path": "observations/46083.json",
+      "observation_count": 6457,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4184365
+    },
+    {
+      "station_id": "46084",
+      "relative_path": "observations/46084.json",
+      "observation_count": 6468,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4192739
+    },
+    {
+      "station_id": "46085",
+      "relative_path": "observations/46085.json",
+      "observation_count": 6458,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4186220
+    },
+    {
+      "station_id": "46086",
+      "relative_path": "observations/46086.json",
+      "observation_count": 6503,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4215954
+    },
+    {
+      "station_id": "46087",
+      "relative_path": "observations/46087.json",
+      "observation_count": 6501,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4213447
+    },
+    {
+      "station_id": "46088",
+      "relative_path": "observations/46088.json",
+      "observation_count": 6499,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T06:00:00+00:00",
+      "file_size_bytes": 4216058
+    },
+    {
+      "station_id": "46089",
+      "relative_path": "observations/46089.json",
+      "observation_count": 6453,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4185174
+    },
+    {
+      "station_id": "51000",
+      "relative_path": "observations/51000.json",
+      "observation_count": 6471,
+      "first_observed_at_utc": "2026-06-08T00:00:00+00:00",
+      "last_observed_at_utc": "2026-07-23T05:50:00+00:00",
+      "file_size_bytes": 4185049
+    }
+  ]
+}

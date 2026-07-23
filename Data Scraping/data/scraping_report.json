@@ -1,0 +1,17 @@
+{
+  "scrape_run_id": "ndbc-20260723-061419-0c3bbdce81",
+  "started_at": "2026-07-23T06:14:19.4124354+00:00",
+  "finished_at": "2026-07-23T06:24:10.3184768+00:00",
+  "target_station_count": 90,
+  "target_met": true,
+  "source_candidate_count": 375,
+  "processed_candidate_count": 254,
+  "successful_station_count": 90,
+  "skipped_non_buoy_count": 18,
+  "skipped_no_data_count": 146,
+  "failed_attempt_count": 0,
+  "total_observation_count": 571167,
+  "duplicate_observation_count": 0,
+  "station_list_source_url": "https://www.ndbc.noaa.gov/to_station.shtml",
+  "output_directory": "D:\\ZIZAKAYA\\Asisten Basis Data\\Seleksi-2026-Tugas-1\\Data Scraping\\data"
+}
