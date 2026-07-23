@@ -31,9 +31,6 @@ Thumbs.db
 .env
 .env.*
 
-# Sementara
-/Data Scraping/data/
-
 # File gabungan dibuat secara lokal, tetapi terlalu besar untuk GitHub
 /Data Scraping/data/observations.json
 /Data Scraping/data/observations.json.tmp
