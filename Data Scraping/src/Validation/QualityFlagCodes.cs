@@ -1,58 +1,39 @@
-namespace BmkgScraper.Validation;
+namespace NdbcScraper.Validation;
 
 internal static class QualityFlagCodes
 {
-    public const string VisibilityParseFailed =
-        "VISIBILITY_PARSE_FAILED";
+    public const string WindDirectionOutOfRange =
+        "WIND_DIRECTION_OUT_OF_RANGE";
 
-    public const string VisibilityOutOfRange =
-        "VISIBILITY_OUT_OF_RANGE";
-
-    public const string TideMissing =
-        "TIDE_MISSING";
-
-    public const string TideParseFailed =
-        "TIDE_PARSE_FAILED";
-
-    public const string ForecastStale =
-        "FORECAST_STALE";
-
-    public const string ForecastPeriodLagged =
-        "FORECAST_PERIOD_LAGGED";
-
-    public const string GustLowerThanWindSpeed =
-        "GUST_LOWER_THAN_WIND_SPEED";
+    public const string MeanWaveDirectionOutOfRange =
+        "MEAN_WAVE_DIRECTION_OUT_OF_RANGE";
 
     public const string NegativeWindSpeed =
         "NEGATIVE_WIND_SPEED";
 
+    public const string NegativeWindGust =
+        "NEGATIVE_WIND_GUST";
+
+    public const string GustLowerThanWindSpeed =
+        "GUST_LOWER_THAN_WIND_SPEED";
+
     public const string NegativeWaveHeight =
         "NEGATIVE_WAVE_HEIGHT";
 
-    public const string NegativeCurrentSpeed =
-        "NEGATIVE_CURRENT_SPEED";
+    public const string NegativeDominantWavePeriod =
+        "NEGATIVE_DOMINANT_WAVE_PERIOD";
 
-    public const string CurrentSpeedOutOfRange =
-        "CURRENT_SPEED_OUT_OF_RANGE";
+    public const string NegativeAverageWavePeriod =
+        "NEGATIVE_AVERAGE_WAVE_PERIOD";
 
-    public const string CurrentSpeedSpike =
-        "CURRENT_SPEED_SPIKE";
+    public const string SeaTemperatureOutOfRange =
+        "SEA_TEMPERATURE_OUT_OF_RANGE";
 
-    public const string HumidityOutOfRange =
-        "HUMIDITY_OUT_OF_RANGE";
+    public const string AllTargetMeasurementsMissing =
+        "ALL_TARGET_MEASUREMENTS_MISSING";
 
-    public const string TemperatureOutOfRange =
-        "TEMPERATURE_OUT_OF_RANGE";
-
-    public const string UnexpectedForecastCount =
-        "UNEXPECTED_FORECAST_COUNT";
-
-    public const string DuplicateForecastTime =
-        "DUPLICATE_FORECAST_TIME";
-
-    public const string ForecastTimeNotSorted =
-        "FORECAST_TIME_NOT_SORTED";
-
-    public const string ForecastTimeGap =
-        "FORECAST_TIME_GAP";
+    public static string ParseFailed(string columnName)
+    {
+        return $"{columnName.ToUpperInvariant()}_PARSE_FAILED";
+    }
 }
